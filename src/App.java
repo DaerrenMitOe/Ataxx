@@ -9,6 +9,9 @@ import javax.swing.JFrame;
 public class App implements ActionListener  {
 	private GuiGame gui;
     private Game game;
+
+    private String[] possibleMove1;
+
 	public App() {
         super();
         game = new Game();
@@ -25,84 +28,26 @@ public class App implements ActionListener  {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         String action = e.getActionCommand();
         //deletePossibleMoveOnBoard();
         //getBoard();
-        switch(game.getBoardValue(action)){
-            case 0:
-                deletePossibleMoveOnBoard();
-                getBoard();
+
+        if(game.move%2 == 0){
+            while (true) {
+                
                 break;
-            case -1,1:
-                //deletePossibleMoveOnBoard();
-                uff(game.getPossibleMove(action));
-                //getBoard();
-                break;
+            }
 
                 /*
-            case 3:
-                deletePossibleMoveOnBoard();
-                for(int i = 0; i < game.possibleMove1.length; i++){
-                    if(game.possibleMove1[i] != null){
-                        if(game.possibleMove1[i].equals(action)){
-                            game.moveStone1(action);
 
-                        }
-                    } 
-                }
-
-                for(int i = 0; i < game.possibleMove2.length; i++){
-                    if(game.possibleMove2[i] != null){
-                        if(game.possibleMove2[i].equals(action)){
-                            game.moveStone2(action);
-                        }
-                    }
-                }
-                getBoard();
-                break;
-            case 4:
-                deletePossibleMoveOnBoard();
-                game.moveStone1(action);
-                for(int i = 0; i < game.possibleMove1.length; i++){
-                    if(game.possibleMove1[i] != null){
-                        if(game.possibleMove1[i].equals(action)){
-                            game.moveStone1(action);
-
-                        }
-                    } 
-                }
-
-                for(int i = 0; i < game.possibleMove2.length; i++){
-                    if(game.possibleMove2[i] != null){
-                        if(game.possibleMove2[i].equals(action)){
-                            game.moveStone2(action);
-                        }
-                    }
-                }
-                getBoard();
-                break;
-            case 5:
-                deletePossibleMoveOnBoard();
-                game.moveStone1(action);
-                for(int i = 0; i < game.possibleMove1.length; i++){
-                    if(game.possibleMove1[i] != null){
-                        if(game.possibleMove1[i].equals(action)){
-                            game.moveStone1(action);
-
-                        }
-                    } 
-                }
-
-                for(int i = 0; i < game.possibleMove2.length; i++){
-                    if(game.possibleMove2[i] != null){
-                        if(game.possibleMove2[i].equals(action)){
-                            game.moveStone2(action);
-                        }
-                    }
-                }
-                getBoard();
-                break;
-            */
+                -wer ist dran
+                -nur die eigenen steine klicken 
+                -mögliche züge
+                -- andere stein mögliche züge weg
+                -- 1 oder 2 schrite
+                -andere ist dran
+           */
         }
 
     }

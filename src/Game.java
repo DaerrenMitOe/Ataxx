@@ -1,16 +1,18 @@
 import java.util.Arrays;
 
 public class Game {
-	protected int moves;
+	protected int move;
+	protected int[] points = new int[2];
 	protected int[][] board;
 	protected String[][] coordinate;
 	
 	public Game(){
-		this.moves = 0;
+		this.move = 1;
 		this.board = initBoard();
 		this.coordinate = initCoordinate();
 
-		System.out.println(Arrays.deepToString(getPossibleMove("B2")));
+		System.out.println(Arrays.deepToString(getAllPosissibelMove(1)));
+		System.out.println(Arrays.deepToString(getAllPosissibelMove(1)[1][0]));
 	}
 	
 	public int[][] initBoard() {
@@ -65,19 +67,15 @@ public class Game {
 	}
 
 	public void moveStone1(String action){
+		String[] possibleMove1 = getPossibleMove1(action);
 		
-		
-		if(getBoardValue(action) == 1){
+		for(int i = 0; i < possibleMove1.length; i++) {
+			if(getBoardValue(possibleMove1[i]) == -getCurrentPlayer()){
+				board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(possibleMove1[i])[1]]=getCurrentPlayer();
+			};
 
 		}
-		setPossibleMove1(coordinateOnBoard(action)[0],coordinateOnBoard(action)[1]);
-		for(int i = 0; i < possibleMove1.length; i++) {
-			if(possibleMove1[i] != null){
-				if(board[coordinateOnBoard(possibleMove1[i])[0]][coordinateOnBoard(possibleMove1[i])[1]] == 2){
-					board[coordinateOnBoard(possibleMove1[i])[0]][coordinateOnBoard(possibleMove1[i])[1]] = 1;
-				};
-			}
-		}
+		
 	}
 
 
@@ -399,22 +397,64 @@ public class Game {
 	}
 
 
-	public String[] getAllAction(int playerStone){
-		String[] stone = new String[board.length * board.length];
+	public String[] getAllStoneCoordinate(int playerStone){
+		String[] allStoneCoordinate = new String[board.length * board.length];
 		int k = 0;
 		for(int i = 0; i < board.length; i++) {
             for(int j = 0; j < board.length; j++) {
 				if(board[i][j] == playerStone){
-					stone[k] = coordinate[i][j];
+					allStoneCoordinate[k] = coordinate[i][j];
+					k += 1;
 				}
 			}
 		}
 
-		stone = deleteNull(stone);
-		return stone;
+		allStoneCoordinate = deleteNull(allStoneCoordinate);
+		return allStoneCoordinate;
 	}
-	/*
+
+	public String[][][] getAllPosissibelMove(int playerStone) {
+		String[] allStoneCoordinate = getAllStoneCoordinate(playerStone);
+		String[][][] allPosissibelMove = new String [2][allStoneCoordinate.length][24];
+
+		for(int i = 0; i < allPosissibelMove[0].length; i++) {
+			allPosissibelMove[0][i][0] = allStoneCoordinate[i];
+		}
+
+		for(int i = 0; i < allPosissibelMove[0].length; i++) {
+			allPosissibelMove[0][i] = deleteNull(allPosissibelMove[0][i]);
+		}
+
+
+		for(int i = 0; i < allPosissibelMove[0].length; i++) {
+			for(int j = 0; j < getPossibleMove(allStoneCoordinate[i]).length; j++) {
+				allPosissibelMove[1][i][j] = getPossibleMove(allStoneCoordinate[i])[j];
+			}
+		}
+
+		for(int i = 0; i < allPosissibelMove[0].length; i++) {
+			for(int j = 0; j < allPosissibelMove[0][0].length; j++) {
+				allPosissibelMove[1][i][j] = getPossibleMove(allStoneCoordinate[i])[j];
+				allPosissibelMove[1][i] = deleteNull(allPosissibelMove[1][i]);
+			}
+		}
+
+		return allPosissibelMove;
+	}
+
+	public int getCurrentPlayer() {
+		if(this.move% 2 == 0){
+			return 1;
+		}
+		return -1;
+	}
+
+	public int getPoints(){
+		
+		return  getStonePosition(getCurrentPlayer()).length;
+	}
+	
 	public static void main(String[] args) {
 		Game game = new Game();
-	}*/
+	}
 }
