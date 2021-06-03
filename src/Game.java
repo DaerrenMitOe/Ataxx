@@ -1,38 +1,41 @@
 import java.util.Arrays;
 
 public class Game {
+	final int EMPTY_FIELD = 0;
+	final int PLAYER = 1;
+	final int POSSIBLEMOVE = 2;
+	final int KEK = 3;
+	final int BOARD_COLUMN = 7, BOARD_ROW = 7;
+
 	protected int move;
+	protected int gameRound;
+	protected int[] player = new int[2];
 	protected int[] points = new int[2];
 	protected int[][] board;
 	protected String[][] coordinate;
+
+	protected String[] possibleMove;
+	protected String[] possibleMove1;
+	protected String[] possibleMove2;
 	
 	public Game(){
 		this.move = 1;
-		this.board = initBoard();
-		this.coordinate = initCoordinate();
-
-		System.out.println(Arrays.deepToString(getAllPosissibelMove(1)));
-		System.out.println(Arrays.deepToString(getAllPosissibelMove(1)[1][0]));
+		initBoard();
+		initCoordinate();
 	}
 	
-	public int[][] initBoard() {
-		//vielleicht forscheife verwenden
-		int[][] board = {
-				{0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0},
-				{0, 0, 0, 0, 0, 0, 0},
-		};
-		
-		startingPosition(board);
-
-		return board;
+	public void initBoard() {
+		this.board = new int[BOARD_COLUMN][BOARD_ROW];
+		for(int i = 0; i < BOARD_COLUMN; i++){
+			for(int j = 0; j < BOARD_ROW; j++){
+				this.board[i][j] = EMPTY_FIELD;
+			}
+		}
+	
+		startingPosition();
 	}
 	
-	public int[][] startingPosition(int[][] board) {
+	private void startingPosition() {
 		/*
 		1 = Player1
 		2 = Player2
@@ -41,44 +44,52 @@ public class Game {
 
 		// player 1 = 1
 		// player 2 = -1  verhindert hardcode durch einfaches negieren der zahl
-
-		board[0][0] = 1;
-		board[6][6] = 1;
-
-		board[0][6] = -1;
-		board[6][0] = -1;
-		
-		return board;
+		if(gameRound%2 == 1){
+			board[0][0] = PLAYER;
+			board[6][6] = PLAYER;
+	
+			board[0][6] = -PLAYER;
+			board[6][0] = -PLAYER;
+		} else {
+			board[0][0] = -PLAYER;
+			board[6][6] = -PLAYER;
+	
+			board[0][6] = PLAYER;
+			board[6][0] = PLAYER;
+		}
 	}
 
-	public String[][] initCoordinate() {
-		String[][] coordinate = new String[board.length][board.length];
+	private void initCoordinate() {
 		String[] letter = {
             "A", "B", "C", "D", "E", "F", "G"
         };
 
-		for(int i = 0; i < board.length; i++) {
-            for(int j = 0; j < board.length; j++) {
-				coordinate[i][j] = letter[j] + String.valueOf(7- i);
+		this.coordinate = new String[BOARD_COLUMN][BOARD_ROW];
+
+		for(int i = 0; i < BOARD_COLUMN; i++) {
+            for(int j = 0; j < BOARD_ROW; j++) {
+				this.coordinate[i][j] = letter[j] + String.valueOf(7- i);
 			}
 		}
+	}
+/*
+	public String[][] initGame() {
 
 		return coordinate;
 	}
-
+	*/
 	public void moveStone1(String action){
-		String[] possibleMove1 = getPossibleMove1(action);
 		
-		for(int i = 0; i < possibleMove1.length; i++) {
-			if(getBoardValue(possibleMove1[i]) == -getCurrentPlayer()){
-				board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(possibleMove1[i])[1]]=getCurrentPlayer();
-			};
+		for(int i = 0; i < this.possibleMove1.length; i++) {
+			if(this.possibleMove1[i].equals(action)){
+				setStone1(action);
+				move++;
+				break;
+			}
 
 		}
-		
+		System.out.println(Arrays.deepToString(board));
 	}
-
-
 
 	public void moveStone2(String action){
 		if(moves%2 == 0){
@@ -110,7 +121,22 @@ public class Game {
 
 	}
 
+	private void setStone1(String action){
+		board[getBoardCoordinate(action)[0]][getBoardCoordinate(action)[1]] = getCurrentPlayer();
+	}
+
+	public void showPossibleMove(String action){
+		setPossibleMove(action);
+		for(int i = 0; i < this.possibleMove.length;i++){
+			board[getBoardCoordinate(possibleMove[i])[0]][getBoardCoordinate(possibleMove[i])[1]] = 2 * getCurrentPlayer();
+		}
+		//board[getBoardCoordinate(action)[0]][getBoardCoordinate(action)[1]] = 2 * getCurrentPlayer();
+	}
+
 	public int[] getBoardCoordinate(String coordinate) {
+		/**
+		* 
+		*/
 		int[] boardCoordinate = new int[2];
 		for(int i = 0; i < board.length; i++) {
             for(int j = 0; j < board.length; j++) {
@@ -135,7 +161,19 @@ public class Game {
 		return 0; // wird nie eintreten
 	}
 
-	public String[] getPossibleMove1(String action){
+	public int getBoardValue(int[] coordinate) {
+		
+		for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board.length; j++) {
+				if(this.coordinate[i][j].equals(coordinate)){
+					return board[i][j];
+				}
+			}
+		}
+		return 0; // wird nie eintreten
+	}
+
+	public void setPossibleMove1(String action){
 		/*
 		beginnt links unten gegen den uhrzeigersinn
 		*/
@@ -204,12 +242,10 @@ public class Game {
 			i += 1;
 		}
 		
-		possibleMove1 = deleteNull(possibleMove1);
-		
-		return possibleMove1;
+		this.possibleMove1 = deleteNull(possibleMove1);
 	}
 
-	public String[] getPossibleMove2(String action){
+	public void setPossibleMove2(String action){
 		/*
 		beginnt links unten gegen den uhrzeigersinn
 		*/
@@ -325,8 +361,7 @@ public class Game {
 			i += 1;
 		}
 
-		possibleMove2 = deleteNull(possibleMove2);
-		return possibleMove2;
+		this.possibleMove2 = deleteNull(possibleMove2);
 	}
 /*
 	public String[] getPossibleMove4(String[] possibleMove1, String[] possibleMove2){
@@ -353,10 +388,10 @@ public class Game {
 		return possibleMove;
 	}
 */
-	public String[] getPossibleMove(String action){
-		String[] possibleMove1 = getPossibleMove1(action);
-		String[] possibleMove2 = getPossibleMove2(action);
-		String[] possibleMove = new String[possibleMove1.length + possibleMove2.length];
+	public void setPossibleMove(String action){
+		setPossibleMove1(action);
+		setPossibleMove2(action);
+		String[] possibleMove = new String[this.possibleMove1.length + this.possibleMove2.length];
 		
 		int k = 0;
 		for(int i = 0; i < possibleMove1.length; i++){
@@ -374,9 +409,7 @@ public class Game {
 			}
 		}
 
-		possibleMove = deleteNull(possibleMove);
-
-		return possibleMove;
+		this.possibleMove = deleteNull(possibleMove);
 	}
 	
 	public String[] deleteNull(String[] array){
@@ -390,7 +423,7 @@ public class Game {
 		String[] uff = new String[i];
 
 		for(int j = 0; j < uff.length; j++){
-			uff[j]= array[j];
+			uff[j] = array[j];
 		}
 
 		return uff;
@@ -413,6 +446,7 @@ public class Game {
 		return allStoneCoordinate;
 	}
 
+	/*
 	public String[][][] getAllPosissibelMove(int playerStone) {
 		String[] allStoneCoordinate = getAllStoneCoordinate(playerStone);
 		String[][][] allPosissibelMove = new String [2][allStoneCoordinate.length][24];
@@ -427,21 +461,21 @@ public class Game {
 
 
 		for(int i = 0; i < allPosissibelMove[0].length; i++) {
-			for(int j = 0; j < getPossibleMove(allStoneCoordinate[i]).length; j++) {
-				allPosissibelMove[1][i][j] = getPossibleMove(allStoneCoordinate[i])[j];
+			for(int j = 0; j < setPossibleMove(allStoneCoordinate[i]).length; j++) {
+				allPosissibelMove[1][i][j] = setPossibleMove(allStoneCoordinate[i])[j];
 			}
 		}
 
 		for(int i = 0; i < allPosissibelMove[0].length; i++) {
 			for(int j = 0; j < allPosissibelMove[0][0].length; j++) {
-				allPosissibelMove[1][i][j] = getPossibleMove(allStoneCoordinate[i])[j];
+				allPosissibelMove[1][i][j] = setPossibleMove(allStoneCoordinate[i])[j];
 				allPosissibelMove[1][i] = deleteNull(allPosissibelMove[1][i]);
 			}
 		}
 
 		return allPosissibelMove;
 	}
-
+*/
 	public int getCurrentPlayer() {
 		if(this.move% 2 == 0){
 			return 1;
@@ -449,12 +483,46 @@ public class Game {
 		return -1;
 	}
 
-	public int getPoints(){
-		
-		return  getStonePosition(getCurrentPlayer()).length;
+	public void setPoints(){
+		for(int i = 0; i < points.length; i++){
+			for(int j = 0; j < board.length; j++){
+				for(int k = 0; k < board.length; k++) {
+					if(board[j][k]==player[i]){
+						points[i]++;
+					}
+				}
+			}
+		}
 	}
+
+	public void swapPosition() {
+		for(int i = 0; i < player.length; i++){
+			player[i] = -player[i];
+		}
+	}
+
+	public void gameOver(){
+		if(BOARD_COLUMN * BOARD_ROW == points[0]+points[1]){
+			if(points[0] == points[1]){
+				//unentschieden
+			} else if(points[0] > points[1]) {
+				//player 0 gewiinnnt
+			} else if(points[0] < points[1]) {
+				//player 1 gewinnt
+			}
+		}
+
+		if(points[0] == 0){
+		//player 1 gewinnt
+		}
+		
+		if(points[1] == 0){
+		//player 0 gewinnt
+		}
 	
+	}
+	/*
 	public static void main(String[] args) {
 		Game game = new Game();
-	}
+	}*/
 }

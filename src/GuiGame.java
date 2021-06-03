@@ -34,10 +34,10 @@ public class GuiGame extends JFrame {
         c.setBackground(background);
         c.setLayout(null);
 
-        c.setLayout(new GridLayout(game.board.length + 1, game.board.length + 1));
+        c.setLayout(new GridLayout(game.BOARD_COLUMN + 1, game.BOARD_ROW + 1));
 
-        this.button = new JButton[game.board.length + 1][game.board.length + 1];
-        this.label = new JLabel[game.board.length + 1][game.board.length + 1];
+        this.button = new JButton[game.BOARD_COLUMN + 1][game.BOARD_ROW + 1];
+        this.label = new JLabel[game.BOARD_COLUMN + 1][game.BOARD_ROW + 1];
 
 
 
@@ -78,5 +78,9 @@ public class GuiGame extends JFrame {
     public void setMove(String text) {
         System.out.println(text);
 	}
+
+    public void menu(){
+        
+    }
 }
     

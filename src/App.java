@@ -10,8 +10,6 @@ public class App implements ActionListener  {
 	private GuiGame gui;
     private Game game;
 
-    private String[] possibleMove1;
-
 	public App() {
         super();
         game = new Game();
@@ -23,22 +21,26 @@ public class App implements ActionListener  {
 		gui.setResizable(false);
 		gui.setVisible(true);
 
-        getBoard();
+        showBoard();
 	}
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         String action = e.getActionCommand();
-        //deletePossibleMoveOnBoard();
-        //getBoard();
 
-        if(game.move%2 == 0){
-            while (true) {
-                
-                break;
-            }
+        if(game.getBoardValue(action) == game.PLAYER * game.getCurrentPlayer()){
+            game.showPossibleMove(action);
+            showBoard();
+        } else if(game.getBoardValue(action) == game.POSSIBLEMOVE * game.getCurrentPlayer()) {
+            deletePossibleMove();
+            game.moveStone1(action);
 
+            showBoard();
+        } else if(game.getBoardValue(action) == game.KEK * game.getCurrentPlayer()) {
+
+        } else {
+            showBoard();
+        }
                 /*
 
                 -wer ist dran
@@ -48,8 +50,13 @@ public class App implements ActionListener  {
                 -- 1 oder 2 schrite
                 -andere ist dran
            */
-        }
 
+    }
+
+    public void showPossibleMove(String action) {
+        for(int i = 0; i < this.game.possibleMove.length; i++){
+            //gui.button[game.getBoardCoordinate(game.possibleMove1[i])[0]][game.getBoardCoordinate(game.possibleMove1[i])[1]+1].setBackground(Color.green);
+        }
     }
 
     public void uff(String[] array){
@@ -58,7 +65,30 @@ public class App implements ActionListener  {
         }
     }
   
-    public void getBoard() {
+    public void showBoard() {
+        for(int i = 0; i < game.board.length; i++){
+            for(int j = 0; j < game.board.length; j++){
+                //print
+                gui.button[i][j+1].setText(String.valueOf(game.board[i][j]));
+                switch(game.board[i][j]){
+                    case 0:
+                        gui.button[i][j+1].setBackground(Color.white);
+                        break;
+                    case -1:
+                        gui.button[i][j+1].setBackground(Color.blue);
+                        break;
+                    case 1:
+                        gui.button[i][j+1].setBackground(Color.red);
+                        break;
+                    case -2, 2:
+                        gui.button[i][j+1].setBackground(Color.green);
+                        break;
+                }
+            }
+        }
+    }
+
+    public void PossibleMove() {
         for(int i = 0; i < game.board.length; i++){
             for(int j = 0; j < game.board.length; j++){
                 //gui.button[i-1][j].setText(String.valueOf(game.board[i-1][j-1]));
@@ -67,31 +97,19 @@ public class App implements ActionListener  {
                     gui.button[i][j+1].setBackground(Color.white);
                 } else if (game.board[i][j] == 1){
                     gui.button[i][j+1].setBackground(Color.red);
-                } else if (game.board[i][j] == 2){
+                } else if (game.board[i][j] == -1){
                     gui.button[i][j+1].setBackground(Color.blue);
-                } else if (game.board[i][j] == 3){
-                    gui.button[i][j+1].setBackground(Color.green);
                 }
             }
         }
     }
 
-    public void deletePossibleMoveOnBoard(){
+
+    public void deletePossibleMove(){
         for(int i = 0; i < game.board.length; i++){
             for(int j = 0; j < game.board.length; j++){
-
-                switch(game.board[i][j]){
-                    case 3:
-                        game.board[i][j] = 0;
-                        break;
-                    case 4:
-                        game.board[i][j] -=3;
-                        break;
-                    case 5:
-                        game.board[i][j] -=3;
-                        break;
-                }
-                
+                if(game.board[i][j] == game.POSSIBLEMOVE * game.getCurrentPlayer())
+                    game.board[i][j] -= game.POSSIBLEMOVE * game.getCurrentPlayer();
             }
         }
 
