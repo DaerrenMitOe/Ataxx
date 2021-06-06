@@ -3,8 +3,8 @@ import java.util.Arrays;
 public class Game {
 	final int EMPTY_FIELD = 0;
 	final int PLAYER = 1;
-	final int POSSIBLEMOVE = 2;
-	final int KEK = 3;
+	final int POSSIBLEMOVE1 = 2;
+	final int POSSIBLEMOVE2 = 3;
 	final int BOARD_COLUMN = 7, BOARD_ROW = 7;
 
 	protected int move;
@@ -73,7 +73,7 @@ public class Game {
 			}
 		}
 	}
-/*
+	/*
 	public String[][] initGame() {
 
 		return coordinate;
@@ -82,66 +82,31 @@ public class Game {
 	public void moveStone1(String action){
 		for(int i = 0; i < this.possibleMove1.length; i++) {
 			if(this.possibleMove1[i].equals(action)){
-				setStone1(action);
-				takeStone(getLastAction());
+				setStone(action);
+				takeStone(action);
 				this.move++;
 				break;
 			}
 
 		}
-		System.out.println(Arrays.deepToString(this.possibleMove1));
+		//System.out.println(Arrays.deepToString(this.possibleMove1));
 	}
 
 	public void moveStone2(String action){
-		setEmptyField();
-		setStone2(action);
-		setPossibleMove2(action);
 		for(int i = 0; i < this.possibleMove2.length; i++) {
 			if(this.possibleMove2[i].equals(action)){
-
+				setEmptyField();
+				setStone(action);
+				takeStone(action);
+				this.move++;
+				break;
 			}
 		}
-
-
-		/*
-		if(moves%2 == 0){
-			board[coordinateOnBoard(getlel())[0]][coordinateOnBoard(getlel())[1]] = 0;
-			board[coordinateOnBoard(action)[0]][coordinateOnBoard(action)[1]] = 1;
-			setPossibleMove1(coordinateOnBoard(action)[0],coordinateOnBoard(action)[1]);
-			for(int i = 0; i < possibleMove1.length; i++) {
-				if(possibleMove1[i] != null){
-					if(board[coordinateOnBoard(possibleMove1[i])[0]][coordinateOnBoard(possibleMove1[i])[1]] == 2){
-						board[coordinateOnBoard(possibleMove1[i])[0]][coordinateOnBoard(possibleMove1[i])[1]] = 1;
-					};
-				}
-			}
-			this.moves +=1;
-		} else {
-			board[coordinateOnBoard(getlel())[0]][coordinateOnBoard(getlel())[1]] = 0;
-			board[coordinateOnBoard(action)[0]][coordinateOnBoard(action)[1]] = 2;
-			setPossibleMove1(coordinateOnBoard(action)[0],coordinateOnBoard(action)[1]);
-			for(int i = 0; i < possibleMove1.length; i++) {
-				if(possibleMove1[i] != null){
-					if(board[coordinateOnBoard(possibleMove1[i])[0]][coordinateOnBoard(possibleMove1[i])[1]] == 1){
-						board[coordinateOnBoard(possibleMove1[i])[0]][coordinateOnBoard(possibleMove1[i])[1]] = 2;
-					};
-				}
-			}
-			this.moves +=1;
-		}
-		*/
 	}
 
-	private void setStone1(String action){
-		setLastAction(action);
+	private void setStone(String action){
 		board[getBoardCoordinate(action)[0]][getBoardCoordinate(action)[1]] = getCurrentPlayer();
 	}
-
-	private void setStone2(String action){
-		setLastAction(action);
-		board[getBoardCoordinate(action)[0]][getBoardCoordinate(action)[1]] = getCurrentPlayer();
-	}
-
 
 	private void takeStone(String action){
 		setPossibleMove1(action);
@@ -152,7 +117,6 @@ public class Game {
 		}
 	}
 
-
 	private void setEmptyField(){
 		board[getBoardCoordinate(this.lastAction)[0]][getBoardCoordinate(this.lastAction)[1]] = EMPTY_FIELD;
 	}
@@ -161,18 +125,25 @@ public class Game {
 		return this.lastAction;
 	}
 
-	private void setLastAction(String action){
+	public void setLastAction(String action){
 		this.lastAction = action;
 	}
 
 	public void showPossibleMove(String action){
-		setPossibleMove(action);
-		for(int i = 0; i < this.possibleMove.length;i++){
-			if(board[getBoardCoordinate(possibleMove[i])[0]][getBoardCoordinate(possibleMove[i])[1]] == EMPTY_FIELD){
-				board[getBoardCoordinate(possibleMove[i])[0]][getBoardCoordinate(possibleMove[i])[1]] = 2 * getCurrentPlayer();
+		setPossibleMove1(action);
+		setPossibleMove2(action);
+		 
+		for(int i = 0; i < this.possibleMove1.length;i++){
+			if(board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(possibleMove1[i])[1]] == EMPTY_FIELD){
+				board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(possibleMove1[i])[1]] = POSSIBLEMOVE1 * getCurrentPlayer();
 			}
 		}
-		//board[getBoardCoordinate(action)[0]][getBoardCoordinate(action)[1]] = 2 * getCurrentPlayer();
+
+		for(int i = 0; i < this.possibleMove2.length;i++){
+			if(board[getBoardCoordinate(possibleMove2[i])[0]][getBoardCoordinate(possibleMove2[i])[1]] == EMPTY_FIELD){
+				board[getBoardCoordinate(possibleMove2[i])[0]][getBoardCoordinate(possibleMove2[i])[1]] = POSSIBLEMOVE2 * getCurrentPlayer();
+			}
+		}
 	}
 
 	public int[] getBoardCoordinate(String coordinate) {
