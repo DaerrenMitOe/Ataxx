@@ -21,7 +21,7 @@ public class App implements ActionListener  {
 		gui.setResizable(false);
 		gui.setVisible(true);
 
-        gui.showBoard();
+        showBoard();
 	}
 
     @Override
@@ -31,16 +31,16 @@ public class App implements ActionListener  {
         if(game.getBoardValue(action) == game.PLAYER * game.getCurrentPlayer()){
             deletePossibleMove();
             game.showPossibleMove(action);
-            gui.showBoard();
+            showBoard();
         } else if(game.getBoardValue(action) == game.POSSIBLEMOVE * game.getCurrentPlayer()) {
             deletePossibleMove();
             game.moveStone1(action);
 
-            gui.showBoard();
+            showBoard();
         } else if(game.getBoardValue(action) == game.KEK * game.getCurrentPlayer()) {
 
         } else {
-            gui.showBoard();
+            showBoard();
         }
                 /*
 
