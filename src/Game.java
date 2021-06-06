@@ -14,6 +14,7 @@ public class Game {
 	protected int[][] board;
 	protected String[][] coordinate;
 
+	private String lastAction;
 	protected String[] possibleMove;
 	protected String[] possibleMove1;
 	protected String[] possibleMove2;
@@ -68,7 +69,7 @@ public class Game {
 
 		for(int i = 0; i < BOARD_COLUMN; i++) {
             for(int j = 0; j < BOARD_ROW; j++) {
-				this.coordinate[i][j] = letter[j] + String.valueOf(7- i);
+				this.coordinate[i][j] = letter[j] + String.valueOf(7 - i);
 			}
 		}
 	}
@@ -79,19 +80,30 @@ public class Game {
 	}
 	*/
 	public void moveStone1(String action){
-		
 		for(int i = 0; i < this.possibleMove1.length; i++) {
 			if(this.possibleMove1[i].equals(action)){
 				setStone1(action);
-				move++;
+				takeStone(getLastAction());
+				this.move++;
 				break;
 			}
 
 		}
-		System.out.println(Arrays.deepToString(board));
+		System.out.println(Arrays.deepToString(this.possibleMove1));
 	}
 
 	public void moveStone2(String action){
+		setEmptyField();
+		setStone2(action);
+		setPossibleMove2(action);
+		for(int i = 0; i < this.possibleMove2.length; i++) {
+			if(this.possibleMove2[i].equals(action)){
+
+			}
+		}
+
+
+		/*
 		if(moves%2 == 0){
 			board[coordinateOnBoard(getlel())[0]][coordinateOnBoard(getlel())[1]] = 0;
 			board[coordinateOnBoard(action)[0]][coordinateOnBoard(action)[1]] = 1;
@@ -117,25 +129,55 @@ public class Game {
 			}
 			this.moves +=1;
 		}
-		
-
+		*/
 	}
 
 	private void setStone1(String action){
+		setLastAction(action);
 		board[getBoardCoordinate(action)[0]][getBoardCoordinate(action)[1]] = getCurrentPlayer();
+	}
+
+	private void setStone2(String action){
+		setLastAction(action);
+		board[getBoardCoordinate(action)[0]][getBoardCoordinate(action)[1]] = getCurrentPlayer();
+	}
+
+
+	private void takeStone(String action){
+		setPossibleMove1(action);
+		for(int i = 0; i < this.possibleMove1.length; i++) {
+			if(board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(possibleMove1[i])[1]] == -getCurrentPlayer()){
+				board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(possibleMove1[i])[1]] = getCurrentPlayer();
+			}
+		}
+	}
+
+
+	private void setEmptyField(){
+		board[getBoardCoordinate(this.lastAction)[0]][getBoardCoordinate(this.lastAction)[1]] = EMPTY_FIELD;
+	}
+
+	private String getLastAction(){
+		return this.lastAction;
+	}
+
+	private void setLastAction(String action){
+		this.lastAction = action;
 	}
 
 	public void showPossibleMove(String action){
 		setPossibleMove(action);
 		for(int i = 0; i < this.possibleMove.length;i++){
-			board[getBoardCoordinate(possibleMove[i])[0]][getBoardCoordinate(possibleMove[i])[1]] = 2 * getCurrentPlayer();
+			if(board[getBoardCoordinate(possibleMove[i])[0]][getBoardCoordinate(possibleMove[i])[1]] == EMPTY_FIELD){
+				board[getBoardCoordinate(possibleMove[i])[0]][getBoardCoordinate(possibleMove[i])[1]] = 2 * getCurrentPlayer();
+			}
 		}
 		//board[getBoardCoordinate(action)[0]][getBoardCoordinate(action)[1]] = 2 * getCurrentPlayer();
 	}
 
 	public int[] getBoardCoordinate(String coordinate) {
 		/**
-		* 
+		* @DaerrenMitOe uff kek
 		*/
 		int[] boardCoordinate = new int[2];
 		for(int i = 0; i < board.length; i++) {

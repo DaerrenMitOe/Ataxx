@@ -21,7 +21,7 @@ public class App implements ActionListener  {
 		gui.setResizable(false);
 		gui.setVisible(true);
 
-        showBoard();
+        gui.showBoard();
 	}
 
     @Override
@@ -29,17 +29,18 @@ public class App implements ActionListener  {
         String action = e.getActionCommand();
 
         if(game.getBoardValue(action) == game.PLAYER * game.getCurrentPlayer()){
+            deletePossibleMove();
             game.showPossibleMove(action);
-            showBoard();
+            gui.showBoard();
         } else if(game.getBoardValue(action) == game.POSSIBLEMOVE * game.getCurrentPlayer()) {
             deletePossibleMove();
             game.moveStone1(action);
 
-            showBoard();
+            gui.showBoard();
         } else if(game.getBoardValue(action) == game.KEK * game.getCurrentPlayer()) {
 
         } else {
-            showBoard();
+            gui.showBoard();
         }
                 /*
 
@@ -62,29 +63,6 @@ public class App implements ActionListener  {
     public void uff(String[] array){
         for(int i = 0; i < array.length; i++){
             gui.button[game.getBoardCoordinate(array[i])[0]][game.getBoardCoordinate(array[i])[1]+1].setBackground(Color.green);
-        }
-    }
-  
-    public void showBoard() {
-        for(int i = 0; i < game.board.length; i++){
-            for(int j = 0; j < game.board.length; j++){
-                //print
-                gui.button[i][j+1].setText(String.valueOf(game.board[i][j]));
-                switch(game.board[i][j]){
-                    case 0:
-                        gui.button[i][j+1].setBackground(Color.white);
-                        break;
-                    case -1:
-                        gui.button[i][j+1].setBackground(Color.blue);
-                        break;
-                    case 1:
-                        gui.button[i][j+1].setBackground(Color.red);
-                        break;
-                    case -2, 2:
-                        gui.button[i][j+1].setBackground(Color.green);
-                        break;
-                }
-            }
         }
     }
 
@@ -112,7 +90,30 @@ public class App implements ActionListener  {
                     game.board[i][j] -= game.POSSIBLEMOVE * game.getCurrentPlayer();
             }
         }
+    }
 
+    public void showBoard() {
+        for(int i = 0; i < game.board.length; i++){
+            for(int j = 0; j < game.board.length; j++){
+                //print
+                System.out.println(Arrays.deepToString(game.board));
+                gui.button[i][j+1].setText(String.valueOf(game.board[i][j]));
+                switch(game.board[i][j]){
+                    case 0:
+                        gui.button[i][j+1].setBackground(Color.white);
+                        break;
+                    case -1:
+                        gui.button[i][j+1].setBackground(Color.blue);
+                        break;
+                    case 1:
+                        gui.button[i][j+1].setBackground(Color.red);
+                        break;
+                    case -2, 2:
+                        gui.button[i][j+1].setBackground(Color.green);
+                        break;
+                }
+            }
+        }
     }
 
 	public static void main(String[] args) {

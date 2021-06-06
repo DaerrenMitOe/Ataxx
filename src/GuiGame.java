@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 
 import java.awt.GridLayout;
+import java.util.Arrays;
 
 
 public class GuiGame extends JFrame {
@@ -67,7 +68,7 @@ public class GuiGame extends JFrame {
                     button[i][j].setHorizontalAlignment(JButton.CENTER);
                     button[i][j].setOpaque(true);
                     //label[i][j].setBounds(25 + (100* j),25 + (100* i),75+ (100* j), 75  + (100* i));
-                    // button[i][j].setBorder(new LineBorder(background, 25));
+                    //button[i][j].setBorder(new LineBorder(background, 25));
                     
                     c.add(button[i][j]);
                 }
@@ -83,4 +84,3 @@ public class GuiGame extends JFrame {
         
     }
 }
-    
