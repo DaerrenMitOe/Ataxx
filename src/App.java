@@ -35,15 +35,11 @@ public class App implements ActionListener {
             showBoard();
         } else if(game.getBoardValue(action) == game.POSSIBLEMOVE1 * game.getCurrentPlayer()) {
             deletePossibleMove();
-            //game.setLastAction(action);
             game.moveStone1(action);
-            //game.setLastAction(action);
             showBoard();
         } else if(game.getBoardValue(action) == game.POSSIBLEMOVE2 * game.getCurrentPlayer()) {
             deletePossibleMove();
-            //game.setLastAction(action);
             game.moveStone2(action);
-            //game.setLastAction(action);
             showBoard();
         } else {
             showBoard();
@@ -98,19 +94,18 @@ public class App implements ActionListener {
             for(int j = 0; j < game.board.length; j++){
                 //print number
                 gui.button[i][j+1].setText(String.valueOf(game.board[i][j]));
-                switch(game.board[i][j]){
-                    case 0:
-                        gui.button[i][j+1].setBackground(Color.white);
-                        break;
-                    case -1:
-                        gui.button[i][j+1].setBackground(Color.blue);
-                        break;
-                    case 1:
-                        gui.button[i][j+1].setBackground(Color.red);
-                        break;
-                    case -2, 2,-3, 3:
-                        gui.button[i][j+1].setBackground(Color.green);
-                        break;
+                
+                if(game.board[i][j] == game.EMPTY_FIELD){
+                    gui.button[i][j+1].setBackground(Color.white);
+                } else if(game.board[i][j] == game.PLAYER){
+                    gui.button[i][j+1].setBackground(Color.red);
+                    break;
+                } else if(game.board[i][j] == -game.PLAYER){
+                    gui.button[i][j+1].setBackground(Color.blue);
+                    break;
+                } else if(game.board[i][j] == game.POSSIBLEMOVE1 || game.board[i][j] == -game.POSSIBLEMOVE1 || game.board[i][j] == game.POSSIBLEMOVE2 || game.board[i][j] == -game.POSSIBLEMOVE2){
+                    gui.button[i][j+1].setBackground(Color.green);
+                    break;
                 }
             }
         }

@@ -79,6 +79,7 @@ public class Game {
 		return coordinate;
 	}
 	*/
+
 	public void moveStone1(String action){
 		for(int i = 0; i < this.possibleMove1.length; i++) {
 			if(this.possibleMove1[i].equals(action)){
@@ -118,7 +119,7 @@ public class Game {
 	}
 
 	private void setEmptyField(){
-		board[getBoardCoordinate(this.lastAction)[0]][getBoardCoordinate(this.lastAction)[1]] = EMPTY_FIELD;
+		board[getBoardCoordinate(getLastAction())[0]][getBoardCoordinate(getLastAction())[1]] = EMPTY_FIELD;
 	}
 
 	private String getLastAction(){
@@ -174,18 +175,10 @@ public class Game {
 		return 0; // wird nie eintreten
 	}
 
-	public int getBoardValue(int[] coordinate) {
-		
-		for(int i = 0; i < board.length; i++) {
-            for(int j = 0; j < board.length; j++) {
-				if(this.coordinate[i][j].equals(coordinate)){
-					return board[i][j];
-				}
-			}
-		}
-		return 0; // wird nie eintreten
+	public int getBoardValue(int i, int j) {
+		return board[i][j];
 	}
-
+	
 	public void setPossibleMove1(String action){
 		/*
 		beginnt links unten gegen den uhrzeigersinn

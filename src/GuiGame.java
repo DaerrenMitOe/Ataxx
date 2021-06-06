@@ -80,6 +80,10 @@ public class GuiGame extends JFrame {
         System.out.println(text);
 	}
 
+    public void board(){
+        
+    }
+
     public void menu(){
         
     }
