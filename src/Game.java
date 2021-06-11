@@ -7,12 +7,18 @@ public class Game {
 	final int POSSIBLEMOVE2 = 3;
 	final int BOARD_COLUMN = 7, BOARD_ROW = 7;
 
+	final int[] GAME_MODE = {
+		1, //vs Player
+		2, //vs random ai
+		3  //vs minmax Ai
+	};
+	final String[][] COORDINATE;
+
 	protected int move;
 	protected int gameRound;
 	protected int[] player = new int[2];
 	protected int[] points = new int[2];
 	protected int[][] board;
-	protected String[][] coordinate;
 
 	private String lastAction;
 	protected String[] possibleMove;
@@ -22,7 +28,7 @@ public class Game {
 	public Game(){
 		this.move = 1;
 		initBoard();
-		initCoordinate();
+		COORDINATE = initCoordinate();
 	}
 	
 	public void initBoard() {
@@ -60,18 +66,20 @@ public class Game {
 		}
 	}
 
-	private void initCoordinate() {
+	private String[][] initCoordinate() {
 		String[] letter = {
             "A", "B", "C", "D", "E", "F", "G"
         };
 
-		this.coordinate = new String[BOARD_COLUMN][BOARD_ROW];
+		String[][] coordinate = new String[BOARD_COLUMN][BOARD_ROW];
 
 		for(int i = 0; i < BOARD_COLUMN; i++) {
             for(int j = 0; j < BOARD_ROW; j++) {
-				this.coordinate[i][j] = letter[j] + String.valueOf(7 - i);
+				coordinate[i][j] = letter[j] + String.valueOf(7 - i);
 			}
 		}
+
+		return coordinate;
 	}
 	/*
 	public String[][] initGame() {
@@ -154,7 +162,7 @@ public class Game {
 		int[] boardCoordinate = new int[2];
 		for(int i = 0; i < board.length; i++) {
             for(int j = 0; j < board.length; j++) {
-				if(this.coordinate[i][j].equals(coordinate)){
+				if(COORDINATE[i][j].equals(coordinate)){
 					boardCoordinate[0]= i;
 					boardCoordinate[1]= j;
 					return boardCoordinate;
@@ -167,7 +175,7 @@ public class Game {
 	public int getBoardValue(String coordinate) {
 		for(int i = 0; i < board.length; i++) {
             for(int j = 0; j < board.length; j++) {
-				if(this.coordinate[i][j].equals(coordinate)){
+				if(COORDINATE[i][j].equals(coordinate)){
 					return board[i][j];
 				}
 			}
@@ -175,10 +183,12 @@ public class Game {
 		return 0; // wird nie eintreten
 	}
 
+	/*
 	public int getBoardValue(int i, int j) {
 		return board[i][j];
 	}
-	
+	*/
+
 	public void setPossibleMove1(String action){
 		/*
 		beginnt links unten gegen den uhrzeigersinn
@@ -202,49 +212,49 @@ public class Game {
 		int i = 0;
 		//links unten
 		if(column + 1 <= 6 && row - 1 >= 0) {
-			possibleMove1[i] = this.coordinate[column + 1][ row - 1];
+			possibleMove1[i] = COORDINATE[column + 1][ row - 1];
 			i += 1;
 		}
 
 		//mitte unten
 		if(column + 1 <= 6) {
-			possibleMove1[i] = this.coordinate[column + 1][ row];
+			possibleMove1[i] = COORDINATE[column + 1][ row];
 			i += 1;
 		}
 
 		//rechts unten
 		if(column + 1 <= 6 && row + 1 <= 6) {
-			possibleMove1[i] = this.coordinate[column + 1][ row + 1];
+			possibleMove1[i] = COORDINATE[column + 1][ row + 1];
 			i += 1;
 		}
 
 		//mitte rechts
 		if(row + 1 <= 6) {
-			possibleMove1[i] = this.coordinate[column][ row + 1];
+			possibleMove1[i] = COORDINATE[column][ row + 1];
 			i += 1;
 		}
 
 		////rechts oben
 		if(column - 1 >= 0 && row + 1 <= 6) {
-			possibleMove1[i] = this.coordinate[column - 1][ row + 1];
+			possibleMove1[i] = COORDINATE[column - 1][ row + 1];
 			i += 1;
 		}
 
 		//mitte oben
 		if(column - 1 >= 0) {
-			possibleMove1[i] = this.coordinate[column - 1][ row];
+			possibleMove1[i] = COORDINATE[column - 1][ row];
 			i += 1;
 		}
 
 		////links oben
 		if(column - 1 >= 0 && row - 1 >= 0) {
-			possibleMove1[i] = this.coordinate[column - 1][ row - 1];
+			possibleMove1[i] = COORDINATE[column - 1][ row - 1];
 			i += 1;
 		}
 
 		////mitte links
 		if(row - 1 >= 0) {
-			possibleMove1[i] = this.coordinate[column][ row - 1];
+			possibleMove1[i] = COORDINATE[column][ row - 1];
 			i += 1;
 		}
 		
@@ -273,97 +283,97 @@ public class Game {
 
 		//links unten
 		if(column + 2 <= 6 && row - 2 >= 0) {
-			possibleMove2[i] = this.coordinate[column + 2][ row - 2];
+			possibleMove2[i] = COORDINATE[column + 2][ row - 2];
 			i += 1;
 		}
 		
 		//mitte unten links
 		if(column + 2 <= 6 && row - 1 >= 0) {
-			possibleMove2[i] = this.coordinate[column + 2][ row - 1];
+			possibleMove2[i] = COORDINATE[column + 2][ row - 1];
 			i += 1;
 		}
 
 		//mitte unten
 		if(column + 2 <= 6) {
-			possibleMove2[i] = this.coordinate[column + 2][ row];
+			possibleMove2[i] = COORDINATE[column + 2][ row];
 			i += 1;
 		}
 
 		//mitte unten rechts
 		if(column + 2 <= 6 && row + 1 <= 6) {
-			possibleMove2[i] = this.coordinate[column + 2][ row + 1];
+			possibleMove2[i] = COORDINATE[column + 2][ row + 1];
 			i += 1;
 		}
 
 		//rechts unten
 		if(column + 2 <= 6 && row + 2 <= 6) {
-			possibleMove2[i] = this.coordinate[column + 2][ row + 2];
+			possibleMove2[i] = COORDINATE[column + 2][ row + 2];
 			i += 1;
 		}
 
 		//mitte rechts unten
 		if(column + 1 <= 6 && row + 2 <= 6) {
-			possibleMove2[i] = this.coordinate[column + 1][ row + 2];
+			possibleMove2[i] = COORDINATE[column + 1][ row + 2];
 			i += 1;
 		}
 
 		//mitte rechts
 		if(row + 2 <= 6) {
-			possibleMove2[i] = this.coordinate[column][ row + 2];
+			possibleMove2[i] = COORDINATE[column][ row + 2];
 			i += 1;
 		}
 
 		//mitte rechts oben
 		if(column - 1 >= 0 && row + 2 <= 6) {
-			possibleMove2[i] = this.coordinate[column - 1][ row + 2];
+			possibleMove2[i] = COORDINATE[column - 1][ row + 2];
 			i += 1;
 		}
 
 		//rechts oben
 		if(column - 2 >= 0 && row + 2 <= 6) {
-			possibleMove2[i] = this.coordinate[column - 2][ row + 2];
+			possibleMove2[i] = COORDINATE[column - 2][ row + 2];
 			i += 1;
 		}
 
 		//mitte oben rechts
 		if(column - 2 >= 0 && row + 1 <= 6) {
-			possibleMove2[i] = this.coordinate[column - 2][ row + 1];
+			possibleMove2[i] = COORDINATE[column - 2][ row + 1];
 			i += 1;
 		}
 
 		//mitte oben
 		if(column - 2 >= 0) {
-			possibleMove2[i] = this.coordinate[column - 2][ row];
+			possibleMove2[i] = COORDINATE[column - 2][ row];
 			i += 1;
 		}
 
 		//mitte oben links
 		if(column - 2 >= 0 && row - 1 >= 0) {
-			possibleMove2[i] = this.coordinate[column - 2][ row - 1];
+			possibleMove2[i] = COORDINATE[column - 2][ row - 1];
 			i += 1;
 		}
 
 		//links oben
 		if(column - 2 >= 0 && row - 2 >= 0) {
-			possibleMove2[i] = this.coordinate[column - 2][ row - 2];
+			possibleMove2[i] = COORDINATE[column - 2][ row - 2];
 			i += 1;
 		}
 
 		//mitte links oben
 		if(column - 1 >= 0 && row - 2 >= 0) {
-			possibleMove2[i] = this.coordinate[column - 1][ row - 2];
+			possibleMove2[i] = COORDINATE[column - 1][ row - 2];
 			i += 1;
 		}
 
 		//mitte links
 		if(row - 2 >= 0) {
-			possibleMove2[i] = this.coordinate[column][ row - 2];
+			possibleMove2[i] = COORDINATE[column][ row - 2];
 			i += 1;
 		}
 
 		//mitte links unten
 		if(column + 1 <= 6 && row - 2 >= 0) {
-			possibleMove2[i] = this.coordinate[column + 1][ row - 2];
+			possibleMove2[i] = COORDINATE[column + 1][ row - 2];
 			i += 1;
 		}
 
@@ -418,13 +428,15 @@ public class Game {
 		this.possibleMove = deleteNull(possibleMove);
 	}
 	
-	public String[] deleteNull(String[] array){
+	private String[] deleteNull(String[] array){
 		int i = 0;
 		for(int j = 0; j < array.length; j++){
 			if(array[j] != null){
 				i += 1;
 			}
 		}
+
+		// anderer name für uff
 
 		String[] uff = new String[i];
 
@@ -435,14 +447,13 @@ public class Game {
 		return uff;
 	}
 
-
 	public String[] getAllStoneCoordinate(int playerStone){
 		String[] allStoneCoordinate = new String[board.length * board.length];
 		int k = 0;
 		for(int i = 0; i < board.length; i++) {
             for(int j = 0; j < board.length; j++) {
 				if(board[i][j] == playerStone){
-					allStoneCoordinate[k] = coordinate[i][j];
+					allStoneCoordinate[k] = COORDINATE[i][j];
 					k += 1;
 				}
 			}
@@ -482,6 +493,24 @@ public class Game {
 		return allPosissibelMove;
 	}
 */
+	public String[] getStoneOnBoard(){
+		String[] stoneOnBoard = new String[BOARD_COLUMN * BOARD_ROW];
+		int i = 0;
+		for(int j = 0; j < points.length; i++){
+			for(int k = 0; k < board.length; j++){
+				if(board[j][k] == getCurrentPlayer()){
+					stoneOnBoard[i] = COORDINATE[j][k]; 
+					i++;
+				}
+			}
+		}
+
+		stoneOnBoard = deleteNull(stoneOnBoard);
+		return stoneOnBoard;
+	}
+
+
+
 	public int getCurrentPlayer() {
 		if(this.move% 2 == 0){
 			return 1;

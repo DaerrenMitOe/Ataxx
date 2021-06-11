@@ -9,10 +9,13 @@ import javax.swing.JFrame;
 public class App implements ActionListener {
 	private GuiGame gui;
     private Game game;
+    private GameRandomAi game1;
 
 	public App() {
         super();
         game = new Game();
+        game1 = new GameRandomAi();
+        
 		gui = new GuiGame(this);
         
 		gui.setSize(700,700);

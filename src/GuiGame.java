@@ -15,7 +15,6 @@ public class GuiGame extends JFrame {
 
     private Game game;
 
-
 	private Container c;
 
 	private Color background = new Color (0XBBADA0);
