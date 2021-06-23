@@ -24,8 +24,8 @@ public class App implements ActionListener {
         gui.setResizable(false);
         gui.setVisible(true);
 
-        showBoard();
-        gui.board();
+        //showBoard();
+        //gui.board();
     }
 
     @Override

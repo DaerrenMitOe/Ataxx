@@ -31,7 +31,7 @@ public class Game {
 		initBoard();
 		COORDINATE = initCoordinate();
 		setPossibleMove2("G7");
-		System.out.println(Arrays.deepToString(this.possibleMove2));
+		System.out.println(Arrays.deepToString(COORDINATE));
 	}
 
 	public void initBoard() {
@@ -247,7 +247,7 @@ umgefärbt!
 		return boardCoordinate;
 	}
 /**
- * Koventiert Brettkoordinate in 
+ * Gibt Wert von Brettkoordinate aus
  * @param coordinate
  * @return
  */

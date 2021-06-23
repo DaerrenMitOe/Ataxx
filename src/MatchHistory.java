@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class MatchHistory {
     public MatchHistory() {
-
+        createNewJson();
     }
 
     public void createNewJson(){
@@ -29,23 +29,33 @@ public class MatchHistory {
         };
 
         JSONArray employeeDetails = new JSONArray();
-        for(int i = 0; i < a.length; i++){
-            employeeDetails.add(a[i]);
+        for(int k = 0; k < a.length; k++){
+            employeeDetails.add(a[k]);
+        }
+
+        JSONArray employeeDetails1 = new JSONArray();
+        for(int j = 0; j < a.length; j++){
+            employeeDetails1.add("u");
         }
         JSONObject employeeObject = new JSONObject(); 
         employeeObject.put(i, employeeDetails);
+        employeeObject.put(i, employeeDetails1);
+        System.out.println(employeeObject);
 
         try {
             FileWriter file = new FileWriter(dtf.format(now) + ".json");
-            file.write(employeeList.toJSONString()); 
+            file.write(employeeObject.toJSONString()); 
             file.flush();
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
     }
+    public static void main(String[] args) {
+        MatchHistory m = new MatchHistory();
+    }
 }
-
+/*
 import java.io.FileWriter;
 import java.io.IOException;
 import org.json.simple.JSONArray;
@@ -94,3 +104,4 @@ JSON file created: {
 "Country":"25000",
 "ID":"1",
 "Date_Of_Birth":"1989-09-26"}
+*/
