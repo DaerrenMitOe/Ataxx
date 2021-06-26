@@ -2,7 +2,6 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
-import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -14,7 +13,7 @@ public class App implements ActionListener {
     public App() {
         super();
         game = new Game();
-        // game1 = new GameRandomAi(game);
+        //game1 = new GameRandomAi(game);
 
         gui = new GuiGame(this);
 
@@ -24,40 +23,38 @@ public class App implements ActionListener {
         gui.setResizable(false);
         gui.setVisible(true);
 
-        //showBoard();
+        showBoard();
         //gui.board();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
+        	
+        System.out.println(action);
+        System.out.println(Arrays.deepToString(game.possibleMove1));
 
         vsPlayer(action);
+        
         /*
          * -wer ist dran -nur die eigenen steine klicken -mögliche züge -- andere stein
          * mögliche züge weg -- 1 oder 2 schrite -andere ist dran
          */
     }
-
-    public void showPossibleMove(String action) {
-        for (int i = 0; i < this.game.possibleMove.length; i++) {
-            // gui.button[game.getBoardCoordinate(game.possibleMove1[i])[0]][game.getBoardCoordinate(game.possibleMove1[i])[1]+1].setBackground(Color.green);
-        }
-    }
-
+/*
     public void uff(String[] array) {
         for (int i = 0; i < array.length; i++) {
             gui.button[game.getBoardCoordinate(array[i])[0]][game.getBoardCoordinate(array[i])[1] + 1]
                     .setBackground(Color.green);
         }
     }
-
+*/
     public void deletePossibleMove() {
         deletePossibleMove1();
         deletePossibleMove2();
     }
 
-    public void deletePossibleMove1() {
+    private void deletePossibleMove1() {
         for (int i = 0; i < game.board.length; i++) {
             for (int j = 0; j < game.board.length; j++) {
                 if (game.board[i][j] == game.POSSIBLEMOVE1 * game.getCurrentPlayer())
@@ -66,7 +63,7 @@ public class App implements ActionListener {
         }
     }
 
-    public void deletePossibleMove2() {
+    private void deletePossibleMove2() {
         for (int i = 0; i < game.board.length; i++) {
             for (int j = 0; j < game.board.length; j++) {
                 if (game.board[i][j] == game.POSSIBLEMOVE2 * game.getCurrentPlayer())
@@ -76,23 +73,20 @@ public class App implements ActionListener {
     }
 
     public void showBoard() {
-        for (int i = 0; i < game.board.length; i++) {
-            for (int j = 0; j < game.board.length; j++) {
+        for (int i = 0; i < game.BOARD_COLUMN; i++) {
+            for (int j = 0; j < game.BOARD_ROW; j++) {
                 // print number
-                gui.button[i][j + 1].setText(String.valueOf(game.board[i][j]));
+                gui.button[i][j].setText(String.valueOf(game.board[i][j]));
 
                 if (game.board[i][j] == game.EMPTY_FIELD) {
-                    gui.button[i][j + 1].setBackground(Color.white);
+                    gui.button[i][j].setBackground(Color.white);
                 } else if (game.board[i][j] == game.PLAYER) {
-                    gui.button[i][j + 1].setBackground(Color.red);
-                    break;
+                    gui.button[i][j].setBackground(Color.red);
                 } else if (game.board[i][j] == -game.PLAYER) {
-                    gui.button[i][j + 1].setBackground(Color.blue);
-                    break;
+                    gui.button[i][j].setBackground(Color.blue);
                 } else if (game.board[i][j] == game.POSSIBLEMOVE1 || game.board[i][j] == -game.POSSIBLEMOVE1
                         || game.board[i][j] == game.POSSIBLEMOVE2 || game.board[i][j] == -game.POSSIBLEMOVE2) {
-                    gui.button[i][j + 1].setBackground(Color.green);
-                    break;
+                    gui.button[i][j].setBackground(Color.green);
                 }
             }
         }
@@ -102,23 +96,34 @@ public class App implements ActionListener {
         if (game.getBoardValue(action) == game.PLAYER * game.getCurrentPlayer()) {
             deletePossibleMove();
             game.setLastAction(action);
-            game.setPossibleMove(action);
+            game.showPossibleMove(action);
             showBoard();
+            gameOver();
         } else if (game.getBoardValue(action) == game.POSSIBLEMOVE1 * game.getCurrentPlayer()) {
             deletePossibleMove();
             game.moveStone1(action);
             showBoard();
+            gameOver();
         } else if (game.getBoardValue(action) == game.POSSIBLEMOVE2 * game.getCurrentPlayer()) {
             deletePossibleMove();
             game.moveStone2(action);
             showBoard();
+            gameOver();
         } else {
             showBoard();
+            gameOver();
         }
     }
 
+    public void gameOver() {
+        if(game.gameOver()){
+            gui.gameOver(game.winnerText());
+        }
+    }
+
+
     public static void main(String[] args) {
-        App app = new App();
+        App a = new App();
     }
 
 }

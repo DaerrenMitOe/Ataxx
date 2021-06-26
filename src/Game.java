@@ -16,7 +16,7 @@ public class Game {
 
 	protected int move;
 	protected int gameRound;
-	protected int[] winner = new int[3];
+	protected boolean[] winner = new boolean[2];
 	protected int[] player = new int[2];
 	protected int[] points = new int[2];
 	protected int[][] board;
@@ -30,8 +30,8 @@ public class Game {
 		this.move = 1;
 		initBoard();
 		COORDINATE = initCoordinate();
-		setPossibleMove2("G7");
-		System.out.println(Arrays.deepToString(COORDINATE));
+		//setPossibleMove2("G7");
+		//nextRound();
 	}
 
 	public void initBoard() {
@@ -189,14 +189,15 @@ umgefärbt!
 	private String[] setPossibleMove(String[] array) {
 		int i = 0;
 		for (int j = 0; j < array.length; j++) {
-			if (board[getBoardCoordinate(array[i])[0]][getBoardCoordinate(array[i])[1]] == EMPTY_FIELD) {
-				i += 1;
+			if (board[getBoardCoordinate(array[j])[0]][getBoardCoordinate(array[j])[1]] == EMPTY_FIELD) {
+				i++;
 			}
 		}
 
 		// anderer name für uff
 
 		String[] uff = new String[i];
+		
 		int k = 0;
 
 		for (int j = 0; j < array.length; j++) {
@@ -290,49 +291,49 @@ umgefärbt!
 		// links unten
 		if (column + 1 <= 6 && row - 1 >= 0) {
 			possibleMove1[i] = COORDINATE[column + 1][row - 1];
-			i += 1;
+			i++;
 		}
 
 		// mitte unten
 		if (column + 1 <= 6) {
 			possibleMove1[i] = COORDINATE[column + 1][row];
-			i += 1;
+			i++;
 		}
 
 		// rechts unten
 		if (column + 1 <= 6 && row + 1 <= 6) {
 			possibleMove1[i] = COORDINATE[column + 1][row + 1];
-			i += 1;
+			i++;
 		}
 
 		// mitte rechts
 		if (row + 1 <= 6) {
 			possibleMove1[i] = COORDINATE[column][row + 1];
-			i += 1;
+			i++;
 		}
 
 		// rechts oben
 		if (column - 1 >= 0 && row + 1 <= 6) {
 			possibleMove1[i] = COORDINATE[column - 1][row + 1];
-			i += 1;
+			i++;
 		}
 
 		// mitte oben
 		if (column - 1 >= 0) {
 			possibleMove1[i] = COORDINATE[column - 1][row];
-			i += 1;
+			i++;
 		}
 
 		// links oben
 		if (column - 1 >= 0 && row - 1 >= 0) {
 			possibleMove1[i] = COORDINATE[column - 1][row - 1];
-			i += 1;
+			i++;
 		}
 
 		// mitte links
 		if (row - 1 >= 0) {
 			possibleMove1[i] = COORDINATE[column][row - 1];
-			i += 1;
+			i++;
 		}
 
 		this.possibleMove1 = deleteNull(possibleMove1);
@@ -475,7 +476,10 @@ umgefärbt!
 			possibleMove[k] = possibleMove2[i];
 			k++;
 		}
+
+		//this.possibleMove = deleteNull(possibleMove);
 	}
+
 	/**
 	 * Löscht null im Array
 	 * @param array
@@ -563,15 +567,34 @@ umgefärbt!
 	}
 
 	public void setPoints() {
-		for (int i = 0; i < points.length; i++) {
-			for (int j = 0; j < board.length; j++) {
-				for (int k = 0; k < board.length; k++) {
-					if (board[j][k] == player[i]) {
-						points[i]++;
-					}
+		resetPoints();
+
+		for (int j = 0; j < board.length; j++) {
+			for (int k = 0; k < board.length; k++) {
+				if (board[j][k] == -PLAYER) {
+					points[0]++;
+				} else if (board[j][k] == PLAYER) {
+					points[1]++;
 				}
 			}
 		}
+	}
+
+	public void resetPoints() {
+		for (int i = 0; i < points.length; i++) {
+			points[i] = 0;
+		}
+	}
+
+	public String winnerText(){
+		if(this.winner[0] && this. winner[1]){
+			return "Unentschieden";
+		} else if(this.winner[0]){
+			return "Blau hat gewonnen";
+		} else if(this.winner[1]){
+			return "Rot hat gewonnen";
+		}
+		return "";
 	}
 
 	public void swapPosition() {
@@ -587,10 +610,15 @@ umgefärbt!
  * <li>oder wenn beide Spieler keine Züge mehr machen können. </li>
  * </ul>
  */
-	public void gameOver() {
+	public boolean gameOver() {
+		setPoints();
 		if(gameOver1() || gameOver2()) {
 			winner();
+			return true;
+			
 		}
+
+		return false;
 	}
 /**
  * <h1>Spielende</h1>
@@ -626,14 +654,63 @@ umgefärbt!
  */
 	private void winner(){
 		if (points[0] == points[1]) {
-			this.winner[1]++;
+			this.winner[0] = true;
+			this.winner[1] = true;
 		} else if (points[0] > points[1]) {
-			this.winner[0]++;
+			this.winner[0] = true;
+			this.winner[1] = false;
 		} else if (points[0] < points[1]) {
-			this.winner[2]++;
+			this.winner[0] = false;
+			this.winner[1] = true;
 		}
 	}
 
+	private void resetWinner(){
+		this.winner[0] = false;
+		this.winner[1] = false;
+	}
+/**
+ * <h1>Sieger</h1>
+ * <p>Der Spieler, der mehr Steine seiner Farbe auf dem Plan hat, gewinnt.
+ * <br>
+ * uff[1][k] = spiler -1
+ * uff[1][k] = spieler 1
+ */
+	public String[][] playerStone(){
+		String[][] uff = new String[player.length][BOARD_COLUMN * BOARD_COLUMN];
+		int k = 0;
+		for (int i = 0; i < BOARD_COLUMN; i++) {
+			for (int j = 0; j < BOARD_ROW; j++) {
+				if(board[i][j] == -PLAYER){
+					uff[0][k] = COORDINATE[i][j];
+					k++;
+				} else if(board[i][j] == PLAYER){
+					uff[1][k] = COORDINATE[i][j];
+					k++;
+				}
+			}
+		}
+
+		return uff;
+	}
+
+	public void nextRound() {
+		/*
+		3d recheckt [länge][höhe][breite]
+		*/
+        String[][][] kek = new String [2][1][BOARD_COLUMN * BOARD_ROW];
+
+        int a = kek[0].length - 1;
+		for(int j = 0; j < 2; j++){
+			for(int i = 0; i < playerStone()[0].length; i++){
+				kek[j][0][i] = playerStone()[j][i];
+			}
+		}
+		System.out.println(Arrays.deepToString(kek));
+
+        
+
+    }
 	/*
 	 * public static void main(String[] args) { Game game = new Game(); }
 	 */

@@ -1,71 +1,60 @@
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Font;
+
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
+import javax.swing.JScrollPane;
 
 
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.util.Arrays;
 
-
 public class GuiGame extends JFrame {
     private App app;
-
     private Game game;
 
-	private Container c;
+    private Color background = new Color(0XBBADA0);
+    private Font font = new Font("Tahoma", Font.BOLD, 15);
 
-	private Color background = new Color (0XBBADA0);
-	private Font font = new Font("Tahoma", Font.BOLD, 15);
-	
     private JPanel[] panel;
     private JLabel[] label;
-    protected JButton[][] button;
-
-/*
-    protected JButton[][] button;
-    protected JLabel[][] label;
-    private JPanel panel;
-*/
+    public JButton[][] button;
 
     public GuiGame(App app) {
         super("Attax");
-        game = new Game();
 
-        String[] letter = {
-            "A", "B", "C", "D", "E", "F", "G"
+        String[] letter = { 
+            "A", "B", "C", "D", "E", "F", "G" 
         };
+
+        game = new Game();
         panel = new JPanel[5];
-        button = new JButton[7][7];
 
         // Panel 1
         panel[0] = new JPanel();
-        panel[0].setLayout(new GridLayout(1, 9));
-        for(int i = 0; i < game.BOARD_ROW + 2; i++){
-            if(i == 0 || i == 8){
-                panel[0].add(new JLabel());
-            } else {
-                panel[0].add(new JLabel(letter[i-1]));
-            }
+        panel[0].setLayout(new GridLayout(1, 7));
+        for (int i = 0; i < game.BOARD_ROW; i++) {
+            panel[0].add(new JLabel(letter[i]));
         }
 
         // Panel 2
         panel[1] = new JPanel();
         panel[1].setLayout(new GridLayout(7, 1));
-        for(int i = 0; i > game.BOARD_COLUMN; i++){
+        for (int i = 0; i < game.BOARD_COLUMN; i++) {
             panel[1].add(new JLabel(String.valueOf(7 - i)));
         }
 
         // Panel 3
+        button = new JButton[7][7];
         panel[2] = new JPanel();
         panel[2].setLayout(new GridLayout(7, 7));
-        for(int i = 0; i < game.BOARD_ROW; i++){
-            for(int j = 0; j < game.BOARD_COLUMN; j++){
+        for (int i = 0; i < game.BOARD_ROW; i++) {
+            for (int j = 0; j < game.BOARD_COLUMN; j++) {
                 button[i][j] = new JButton();
                 button[i][j].setActionCommand(game.COORDINATE[i][j]);
                 button[i][j].addActionListener(app);
@@ -76,20 +65,104 @@ public class GuiGame extends JFrame {
         // Panel 4
         panel[3] = new JPanel();
         panel[3].setLayout(new GridLayout(7, 1));
-        for(int i = 0; i > game.BOARD_COLUMN; i++){
+        for (int i = 0; i < game.BOARD_COLUMN; i++) {
             panel[3].add(new JLabel(String.valueOf(7 - i)));
         }
 
         // Panel 5
         panel[4] = new JPanel();
-        panel[4].setLayout(new GridLayout(1, 9));
-        for(int i = 0; i < game.BOARD_ROW + 2; i++){
-            if(i == 0 || i == 8){
-                panel[4].add(new JLabel());
-            } else {
-                panel[4].add(new JLabel(letter[i-1]));
+        panel[4].setLayout(new GridLayout(1, 7));
+        for (int i = 0; i < game.BOARD_ROW; i++) {
+            panel[4].add(new JLabel(letter[i]));
+        }
+   
+/*
+* actionlister funktioniert nicht
+        // Panel 1
+        panel[0] = letterCoordinate();
+
+        // Panel 2
+        panel[1] = numberCoordinate();
+
+        // Panel 3
+        board(panel[2]);
+
+        // Panel 4
+        panel[3] = numberCoordinate();
+
+        // Panel 5
+        panel[4] = letterCoordinate();
+*/
+        // Hauptfenster
+        setLayout(new BorderLayout());
+        add(panel[0], BorderLayout.NORTH);
+        add(panel[1], BorderLayout.WEST);
+        add(panel[2], BorderLayout.CENTER);
+        add(panel[3], BorderLayout.EAST);
+        add(panel[4], BorderLayout.SOUTH);
+        
+    }
+
+    private JPanel letterCoordinate() {
+        String[] letter = { "A", "B", "C", "D", "E", "F", "G" };
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(1, 7));
+        for (int i = 0; i < game.BOARD_ROW; i++) {
+            panel.add(new JLabel(letter[i]));
+
+        }
+
+        return panel;
+    }
+
+    private JPanel board() {
+        /*
+        action lister funktioniert nicht wegen funktion
+        */
+        JPanel panel = new JPanel();
+        button = new JButton[7][7];
+        panel.setLayout(new GridLayout(7, 7));
+        for (int i = 0; i < game.BOARD_ROW; i++) {
+            for (int j = 0; j < game.BOARD_COLUMN; j++) {
+                button[i][j] = new JButton();
+                button[i][j].setActionCommand(game.COORDINATE[i][j]);
+                button[i][j].addActionListener(app);
+                panel.add(button[i][j]);
             }
         }
+
+        return panel;
+    }
+
+    private JPanel numberCoordinate() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(7, 1));
+        for (int i = 0; i < game.BOARD_COLUMN; i++) {
+            panel.add(new JLabel(String.valueOf(7 - i)));
+        }
+
+        return panel;
+    }
+
+    private void initGuiBoard() {
+        panel = new JPanel[5];
+
+        // Panel 1
+        panel[0] = letterCoordinate();
+
+        // Panel 2
+        panel[1] = numberCoordinate();
+
+        // Panel 3
+        panel[2] = board();
+
+        // Panel 4
+        panel[3] = numberCoordinate();
+
+        // Panel 5
+        panel[4] = letterCoordinate();
+        //panel[4] = matchhistory();
 
         // Hauptfenster
         setLayout(new BorderLayout());
@@ -98,21 +171,71 @@ public class GuiGame extends JFrame {
         add(panel[2], BorderLayout.CENTER);
         add(panel[3], BorderLayout.EAST);
         add(panel[4], BorderLayout.SOUTH);
-
-        //setLayout(new GridLayout(7,1));
-        //add(panel[0]);
-        //add(panel[1]);
-        //add(panel[2]);
-        //add(panel[3]);
-        //add(panel[4]);
-
     }
 
-    public void setMove(String text) {
-        System.out.println(text);
+    private JPanel matchhistory(){
+
+        String[] namen = {
+            "egon", "frau", "haengen", "maus", "passwort", "post", 
+            "roboter", "treiber", "windows", "zaehne"
+        };
+
+        JPanel panel = new JPanel();
+        JList list1 = new JList(namen);
+        JScrollPane scrollPane1 = new JScrollPane(list1);
+
+        JList list2 = new JList(namen);
+        JScrollPane scrollPane2 = new JScrollPane(list2);
+
+        JList list3 = new JList(namen);
+        JScrollPane scrollPane3 = new JScrollPane(list3);
+
+        list1.setEnabled(false);
+        list2.setEnabled(false);
+        list3.setEnabled(false);
+
+        list1.setForeground(Color.red);
+
+        panel.setLayout(new GridLayout(1, 3));
+
+        panel.add(list1);
+        panel.add(list2);
+        panel.add(list3);
+
+        return panel;
+    }
+
+    public void gameOver(String winner) {
+        // Erstellung Array vom Datentyp Object, Hinzufügen der Optionen		
+        Object[] options = {
+            "Rematch", "New Game", "Cancel"
+        };
+
+        int selected = JOptionPane.showOptionDialog(null,
+                                                    winner,
+                                                    "Game Over",
+                        JOptionPane.DEFAULT_OPTION, 
+                                                    JOptionPane.INFORMATION_MESSAGE, 
+                        null, options,null);
+
+        switch(selected){
+            case 0:
+                new Game();
+                break;
+
+            case 1:
+                game.initBoard();
+                app.showBoard();
+                break;
+                
+            case 2:
+                break;
+        }
+        System.out.println(selected);
 	}
+/*
     public static void main(String[] args) {
-        App a = new App();
+
         GuiGame n = new GuiGame(a);
 
         n.setSize(500, 500);
@@ -121,4 +244,5 @@ public class GuiGame extends JFrame {
         n.setResizable(false);
         n.setVisible(true);
     }
+    */
 }
