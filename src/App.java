@@ -10,6 +10,8 @@ public class App implements ActionListener {
     private Game game;
     // private GameRandomAi game1;
 
+    private boolean noMove = true;
+
     public App() {
         super();
         game = new Game();
@@ -113,6 +115,7 @@ public class App implements ActionListener {
             showBoard();
             gameOver();
         }
+        
     }
 
     public void gameOver() {

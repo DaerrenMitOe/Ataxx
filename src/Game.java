@@ -135,7 +135,7 @@ Gegner kommt wieder an die Reihe!
 				return false;
 			}
 		}
-		this.move +=2;
+		this.move++;
 		return true;
 	}
 
@@ -174,13 +174,19 @@ umgefärbt!
 		this.lastAction = action;
 	}
 
-	public void showPossibleMove1() {
+	private void showPossibleMove1(String action) {
+		setPossibleMove1(action);
 		for (int i = 0; i < this.possibleMove1.length; i++) {
-			if (board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(
-					possibleMove1[i])[1]] == EMPTY_FIELD) {
-				board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(possibleMove1[i])[1]] = POSSIBLEMOVE1
+			board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(possibleMove1[i])[1]] = POSSIBLEMOVE1
 						* getCurrentPlayer();
 			}
+	}
+
+	private void showPossibleMove2(String action) {
+		setPossibleMove2(action);
+		for (int i = 0; i < this.possibleMove2.length; i++) {
+			board[getBoardCoordinate(possibleMove2[i])[0]][getBoardCoordinate(possibleMove2[i])[1]] = POSSIBLEMOVE2
+						* getCurrentPlayer();
 		}
 	}
 
@@ -209,24 +215,8 @@ umgefärbt!
 	}
 
 	public void showPossibleMove(String action) {
-		setPossibleMove1(action);
-		setPossibleMove2(action);
-
-		for (int i = 0; i < this.possibleMove1.length; i++) {
-			if (board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(
-					possibleMove1[i])[1]] == EMPTY_FIELD) {
-				board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(possibleMove1[i])[1]] = POSSIBLEMOVE1
-						* getCurrentPlayer();
-			}
-		}
-
-		for (int i = 0; i < this.possibleMove2.length; i++) {
-			if (board[getBoardCoordinate(possibleMove2[i])[0]][getBoardCoordinate(
-					possibleMove2[i])[1]] == EMPTY_FIELD) {
-				board[getBoardCoordinate(possibleMove2[i])[0]][getBoardCoordinate(possibleMove2[i])[1]] = POSSIBLEMOVE2
-						* getCurrentPlayer();
-			}
-		}
+		showPossibleMove1(action);
+		showPossibleMove2(action);
 	}
 
 	public int[] getBoardCoordinate(String coordinate) {
