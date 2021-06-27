@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Container;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,6 +23,13 @@ public class GuiNewGame extends JFrame {
 
     public GuiNewGame(App app) {
         super("New Game");
+
+        panel = new JPanel[5];
+        button = new JButton[2];
+        comboBox = new JComboBox[2];
+        radioButton = new JRadioButton[3];
+;
+        this.app = app;
 
         // Panel 1
         panel[0] = new JPanel();

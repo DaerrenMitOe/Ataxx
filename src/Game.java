@@ -30,8 +30,6 @@ public class Game {
 		this.move = 1;
 		initBoard();
 		COORDINATE = initCoordinate();
-		//setPossibleMove2("G7");
-		//nextRound();
 	}
 
 	public void initBoard() {
