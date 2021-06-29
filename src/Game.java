@@ -16,9 +16,11 @@ public class Game {
 
 	protected int move;
 	protected int gameRound;
+	private boolean gameOver;
 	protected boolean[] winner = new boolean[2];
 	protected int[] player = new int[2];
-	protected int[] points = new int[2];
+	protected double[] playerPoints = new double[2];
+	protected double[] stonePoints = new double[2];
 	protected int[][] board;
 
 	private String lastAction;
@@ -639,15 +641,15 @@ umgefärbt!
 	/**
 	 * <p> Speichert die Punktzahl der Spielern ab
 	 */
-	public void setPoints() {
-		resetPoints();
+	public void setStonePoints() {
+		resetStonePoints();
 
 		for (int j = 0; j < BOARD_COLUMN; j++) {
 			for (int k = 0; k < BOARD_ROW; k++) {
 				if (board[j][k] == -PLAYER) {
-					this.points[0]++;
+					this.stonePoints[0]++;
 				} else if (board[j][k] == PLAYER) {
-					this.points[1]++;
+					this.stonePoints[1]++;
 				}
 			}
 		}
@@ -656,27 +658,10 @@ umgefärbt!
 	/**
 	 * <p> Setzt die Punktzahl der Spielern auf 0
 	 */
-	public void resetPoints() {
-		for (int i = 0; i < points.length; i++) {
-			points[i] = 0;
+	public void resetStonePoints() {
+		for (int i = 0; i < stonePoints.length; i++) {
+			stonePoints[i] = 0;
 		}
-	}
-
-	/**
-	 * <p> Gibt Gewinner Text zurück
-	 * @return Gewinner Text
-	 */
-	public String winnerText(){
-		if(this.winner[0] && this. winner[1]){
-			return "Unentschieden";
-		} else if(this.winner[0]){
-			return "Blau hat gewonnen";
-		} else if(this.winner[1]){
-			return "Rot hat gewonnen";
-		}
-
-		//wird nicht eintretten
-		return "";
 	}
 
 	/**
@@ -698,7 +683,8 @@ umgefärbt!
 	 * @return Spielende
 	 */
 	public boolean gameOver() {
-		setPoints();
+		setGameOver();
+		setStonePoints();
 		if(gameOver1() || gameOver2()) {
 			winner();
 			return true;
@@ -716,8 +702,8 @@ umgefärbt!
 	 * @return Spielende
 	 */
 	private boolean gameOver1(){
-		for(int i = 0; i < this.points.length; i++){
-			if (this.points[i] == 0) {
+		for(int i = 0; i < this.stonePoints.length; i++){
+			if (this.stonePoints[i] == 0) {
 				return true;
 			}
 		}
@@ -733,7 +719,7 @@ umgefärbt!
 	 * @return Spielende
 	 */
 	private boolean gameOver2(){
-		if (BOARD_COLUMN * BOARD_ROW == points[0] + points[1]) {
+		if (BOARD_COLUMN * BOARD_ROW == stonePoints[0] + stonePoints[1]) {
 			return true;
 		}
 		return false;
@@ -753,18 +739,49 @@ umgefärbt!
 
 	/**
 	 * <h1>Sieger</h1>
-	 * <p>Der Spieler, der mehr Steine seiner Farbe auf dem Plan hat, gewinnt.
+	 * <p>Der Spieler, der mehr Steine seiner Farbe auf dem Brett hat, gewinnt.
 	 */
 	private void winner(){
-		if (points[0] == points[1]) {
+		if (stonePoints[0] == stonePoints[1]) {
+			//Spieler Punkte
+			this.playerPoints[0] += 0.5;
+			this.playerPoints[1] += 0.5;
+
 			this.winner[0] = true;
 			this.winner[1] = true;
-		} else if (points[0] > points[1]) {
+		} else if (stonePoints[0] > stonePoints[1]) {
+			this.playerPoints[0] += 1;
+
 			this.winner[0] = true;
 			this.winner[1] = false;
-		} else if (points[0] < points[1]) {
+		} else if (stonePoints[0] < stonePoints[1]) {
+			this.playerPoints[1] += 1;
+
 			this.winner[0] = false;
 			this.winner[1] = true;
+		}
+	}
+
+	/**
+	 * Vergibt Spielerpunkte
+	 */
+	private void setPlayerPoints(){
+		if(this.winner[0] && this.winner[1]){
+			this.playerPoints[0] += 0.5;
+			this.playerPoints[1] += 0.5;
+		} else if(this.winner[0]){
+			this.playerPoints[0] += 1;
+		} else if(this.winner[1]){
+			this.playerPoints[1] += 1;
+		}
+	}
+
+	/**
+	 * <p> Setzt Spielerpunkte zurück auf 0
+	 */
+	private void resetPlayerPoints(){
+		for(int i = 0; i < playerPoints.length; i++){
+			this.playerPoints[i] = 0;
 		}
 	}
 
@@ -776,6 +793,21 @@ umgefärbt!
 		this.winner[1] = false;
 	}
 
+	/**
+	 * <p> Setzt this.gameOver auf True, wenn das Spiel vorbei ist
+	 */
+
+	private void setGameOver(){
+		this.gameOver = true;
+	}
+
+	/**
+	 * <p> Setzt this.gameOver auf True, wenn das Spiel vorbei ist
+	 */
+
+	private void resetGameOver(){
+		this.gameOver = false;
+	}
 
 	
 	public String[][] playerStone(){

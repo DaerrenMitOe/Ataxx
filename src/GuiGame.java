@@ -27,30 +27,8 @@ public class GuiGame extends JFrame {
         panel = new JPanel[5];
 
         this.app = app;
-   
-        // Panel 1
-        panel[0] = letterCoordinate(panel[0]);
 
-        // Panel 2
-        panel[1] = numberCoordinate(panel[1]);
-
-        // Panel 3
-        panel[2] = board(panel[2]);
-
-        // Panel 4
-        panel[3] = numberCoordinate(panel[3]);
-
-        // Panel 5
-        panel[4] = letterCoordinate(panel[4]);
-
-        // Hauptfenster
-        setLayout(new BorderLayout());
-        add(panel[0], BorderLayout.NORTH);
-        add(panel[1], BorderLayout.WEST);
-        add(panel[2], BorderLayout.CENTER);
-        add(panel[3], BorderLayout.EAST);
-        add(panel[4], BorderLayout.SOUTH);
-        
+        initGuiBoard();
     }
 
     /**
@@ -113,7 +91,7 @@ public class GuiGame extends JFrame {
      * Initialisiert Spielbrett mit Koordinaten
      */
     private void initGuiBoard() {
-        panel = new JPanel[5];
+        this.panel = new JPanel[5];
 
         // Panel 1
         panel[0] = letterCoordinate(panel[0]);
@@ -179,29 +157,27 @@ public class GuiGame extends JFrame {
     public void gameOver(String winner) {
         // Erstellung Array vom Datentyp Object, Hinzufügen der Optionen		
         Object[] options = {
-            "Rematch", "New Game", "Cancel"
+            "Rematch", "New Game", "Analysis Board"
         };
 
-        int selected = JOptionPane.showOptionDialog(null,
+        int n = JOptionPane.showOptionDialog(this,
                                                     winner,
                                                     "Game Over",
                         JOptionPane.DEFAULT_OPTION, 
-                                                    JOptionPane.INFORMATION_MESSAGE, 
+                                                    JOptionPane.PLAIN_MESSAGE, 
                         null, options,null);
 
-        switch(selected){
+        switch(n){
             case 0:
                 new Game();
                 break;
 
             case 1:
                 game.initBoard();
-                app.showBoard();
                 break;
                 
             case 2:
                 break;
         }
-        System.out.println(selected);
 	}
 }

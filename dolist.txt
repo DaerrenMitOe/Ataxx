@@ -1,0 +1,14 @@
+-punkte bug fixen
+-random ai modus
+-new game gui
+-analysie board gui
+-- pfeile zuruck
+-- match hitory
+-spiel selber erstellen
+-json datei
+-spiele im anaylse board nachspielen
+-von option panel neues spiel starten
+-oben leisten machen
+--neues spiel
+-- exit
+-- hilfe

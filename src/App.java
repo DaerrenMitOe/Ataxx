@@ -97,9 +97,28 @@ public class App implements ActionListener {
      */
     public void gameOver() {
         if(game.gameOver()){
-            gui.gameOver(game.winnerText());
+            gui.gameOver(winnerText());
         }
     }
+
+    	/**
+	 * <p> Gibt Gewinner Text zurück
+	 * @return Gewinner Text
+	 */
+	public String winnerText(){
+        String a = String.valueOf(game.playerPoints[0]);
+        String b = String.valueOf(game.playerPoints[1]);
+		if(game.winner[0] && game.winner[1]){
+			return a + " - " + b + "\nUnentschieden";
+		} else if(game.winner[0]){
+			return  a + " - " + b + "\nBlau hat gewonnen";
+		} else if(game.winner[1]){
+			return  a + " - " + b + "\nRot hat gewonnen";
+		}
+
+		//wird nicht eintretten
+		return "";
+	}
 
 
     public static void main(String[] args) {

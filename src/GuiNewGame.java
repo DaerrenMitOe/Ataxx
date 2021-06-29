@@ -114,6 +114,37 @@ public class GuiNewGame extends JFrame {
         add(panel[4]);
     }
 
+    private JPanel gameVariant(JPanel panel){
+
+    }
+
+    private void timeControl(JPanel panel){
+        String[] timeControl = {
+            "Real Time", "Unlimited"
+        };
+
+
+        panel = new JPanel();
+        for(int i = 0; i < timeControl.length; i++){
+
+        }
+        comboBox[0] = new JComboBox();
+        comboBox[0].addItem("Human");
+		comboBox[0].addItem("Random AI");
+		//comboBox1.addItem("AI");
+        comboBox[0].setActionCommand("timeControl");
+		comboBox[0].addActionListener(app);
+    }
+    public void initNewGame(){
+        // Hauptfenster
+        setLayout(new GridLayout(5,1));
+        add(panel[0]);
+        add(panel[1]);
+        add(panel[2]);
+        add(panel[3]);
+        add(panel[4]);
+    }
+
     public static void main(String[] args) {
         App a = new App();
         GuiNewGame n = new GuiNewGame(a);
