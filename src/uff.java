@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class uff {
     private Game game;
     private String[][][] uff;
@@ -13,7 +15,8 @@ public class uff {
 
         int a = kek1[0].length - 1;
         
-        kek[a] = game.playerStone();
+        String[][][] kek;
+		kek[a] = game.playerStone();
 
 
 
@@ -31,15 +34,15 @@ public class uff {
     }
 
     public String[][] playerStone(){
-		String[][] uff = new String[player.length][BOARD_COLUMN * BOARD_COLUMN];
+		String[][] uff = new String[game.player.length][game.BOARD_COLUMN * game.BOARD_COLUMN];
 		int k = 0;
-		for (int i = 0; i < BOARD_COLUMN; i++) {
-			for (int j = 0; j < BOARD_ROW; j++) {
-				if(board[i][j] == -PLAYER){
-					uff[0][k] = COORDINATE[i][j];
+		for (int i = 0; i < game.BOARD_COLUMN; i++) {
+			for (int j = 0; j < game.BOARD_ROW; j++) {
+				if(game.board[i][j] == -game.PLAYER){
+					uff[0][k] = game.COORDINATE[i][j];
 					k++;
-				} else if(board[i][j] == PLAYER){
-					uff[1][k] = COORDINATE[i][j];
+				} else if(game.board[i][j] == game.PLAYER){
+					uff[1][k] = game.COORDINATE[i][j];
 					k++;
 				}
 			}
@@ -52,7 +55,7 @@ public class uff {
 		/*
 		3d recheckt [länge][höhe][breite]
 		*/
-        String[][][] kek = new String [2][1][BOARD_COLUMN * BOARD_ROW];
+        String[][][] kek = new String [2][1][game.BOARD_COLUMN * game.BOARD_ROW];
 
         int a = kek[0].length - 1;
 		for(int j = 0; j < 2; j++){

@@ -129,19 +129,27 @@ Gegner kommt wieder an die Reihe!
  */
 	public boolean noMove(){
 		String[] uff = getStoneOnBoard();
+		System.out.println(Arrays.deepToString(uff));
+
 		for(int i = 0; i < uff.length; i++){
-			setPossibleMove(uff[i]);
-			if(this.possibleMove.length != 0){
+			String[] possibleMove = setPossibleMove(uff[i]);
+			if(possibleMove.length != 0){
 				return false;
 			}
 		}
+			
 		this.move++;
 		return true;
 	}
 
+/**
+ * <p> Setzt Stein an 
+ * @param action
+ */
 	private void setStone(String action) {
 		board[getBoardCoordinate(action)[0]][getBoardCoordinate(action)[1]] = getCurrentPlayer();
 	}
+	
 /**
  * <h1>Gegnerische Steine umdrehen</h1>
  * <p>Egal ob du geteilt oder bewegt hast: Ist das
@@ -152,8 +160,8 @@ umgefärbt!
  * @param action
  */
 	private void takeStone(String action) {
-		setAllPossibleMove1(getBoardCoordinate(action)[0], getBoardCoordinate(action)[1]);
-		for (int i = 0; i < this.possibleMove1.length; i++) {
+		String[] possibleMove1 = setAllPossibleMove1(getBoardCoordinate(action)[0], getBoardCoordinate(action)[1]);
+		for (int i = 0; i < possibleMove1.length; i++) {
 			if (board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(
 					possibleMove1[i])[1]] == -getCurrentPlayer()) {
 				board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(
@@ -161,35 +169,99 @@ umgefärbt!
 			}
 		}
 	}
-
+	
+	/**
+	 * <p> Setzt ein leeres Feld am vorletzten Zug
+	 */
 	private void setEmptyField() {
 		board[getBoardCoordinate(getLastAction())[0]][getBoardCoordinate(getLastAction())[1]] = EMPTY_FIELD;
 	}
 
+	/**
+	 * @return Gibt vorletzten Zug zurück
+	 */
 	private String getLastAction() {
 		return this.lastAction;
 	}
 
+	/**
+	 * <p> Speichert vorletzten Zug ab
+	 * @param action vorletzter Zug
+	 */
 	public void setLastAction(String action) {
 		this.lastAction = action;
 	}
 
+	/**
+	 * <p> Zeige mögliche Züge an, die ein Feld und zwei Felder weiter von den letzten Zug entfernt sind
+	 * @param action letzter Zug
+	 */
+	public void showPossibleMove(String action) {
+		showPossibleMove1(action);
+		showPossibleMove2(action);
+	}
+
+	/**
+	 * <p> Zeige mögliche Züge an, die ein Feld weiter von den letzten Zug entfernt sind
+	 * @param action letzter Zug
+	 */
 	private void showPossibleMove1(String action) {
-		setPossibleMove1(action);
+		this.possibleMove1 = setPossibleMove1(action);
 		for (int i = 0; i < this.possibleMove1.length; i++) {
-			board[getBoardCoordinate(possibleMove1[i])[0]][getBoardCoordinate(possibleMove1[i])[1]] = POSSIBLEMOVE1
+			board[getBoardCoordinate(this.possibleMove1[i])[0]][getBoardCoordinate(this.possibleMove1[i])[1]] = POSSIBLEMOVE1
 						* getCurrentPlayer();
 			}
 	}
 
+	/**
+	 * <p> Zeige mögliche Züge an, die zwei Felder weiter von den letzten Zug sind entfernt
+	 * @param action letzter Zug
+	 */
 	private void showPossibleMove2(String action) {
-		setPossibleMove2(action);
+		this.possibleMove2 = setPossibleMove2(action);
 		for (int i = 0; i < this.possibleMove2.length; i++) {
-			board[getBoardCoordinate(possibleMove2[i])[0]][getBoardCoordinate(possibleMove2[i])[1]] = POSSIBLEMOVE2
+			board[getBoardCoordinate(this.possibleMove2[i])[0]][getBoardCoordinate(this.possibleMove2[i])[1]] = POSSIBLEMOVE2
 						* getCurrentPlayer();
 		}
 	}
 
+	/**
+	 * <p> Löscht mögliche Züge an, die ein Feld und zwei Felder weiter von den letzten Zug entfernt sind
+	 */
+	public void deletePossibleMove() {
+        deletePossibleMove1();
+        deletePossibleMove2();
+    }
+
+	/**
+	 * <p> Löscht mögliche Züge an, die ein Feld weiter von den letzten Zug entfernt sind
+	 */
+    private void deletePossibleMove1() {
+        for (int i = 0; i < BOARD_COLUMN; i++) {
+            for (int j = 0; j < BOARD_ROW; j++) {
+                if (board[i][j] == POSSIBLEMOVE1 * getCurrentPlayer())
+                    board[i][j] -= POSSIBLEMOVE1 * getCurrentPlayer();
+            }
+        }
+    }
+
+	/**
+	 * <p> Löscht mögliche Züge an, die zwei Felder weiter von den letzten Zug entfernt sind
+	 */
+    private void deletePossibleMove2() {
+        for (int i = 0; i < BOARD_COLUMN; i++) {
+            for (int j = 0; j < BOARD_ROW; j++) {
+                if (board[i][j] == POSSIBLEMOVE2 * getCurrentPlayer())
+                    board[i][j] -= POSSIBLEMOVE2 * getCurrentPlayer();
+            }
+        }
+    }
+
+	/**
+	 * <p> Löscht alle nicht möglichen Züge aus dem Array
+	 * @param array alle möglichen Züge
+	 * @return mögliche Züge
+	 */
 	private String[] setPossibleMove(String[] array) {
 		int i = 0;
 		for (int j = 0; j < array.length; j++) {
@@ -214,15 +286,12 @@ umgefärbt!
 		return uff;
 	}
 
-	public void showPossibleMove(String action) {
-		showPossibleMove1(action);
-		showPossibleMove2(action);
-	}
-
-	public int[] getBoardCoordinate(String coordinate) {
-		/**
-		 * @DaerrenMitOe uff kek
-		 */
+	/**
+	 * <p> Gibt Position der Brettkoordinate auf dem Brett zurück
+	 * @param coordinate Brettkoordinate
+	 * @return Position der Brettkoordinate
+	 */
+	private  int[] getBoardCoordinate(String coordinate) {
 		int[] boardCoordinate = new int[2];
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board.length; j++) {
@@ -235,11 +304,12 @@ umgefärbt!
 		}
 		return boardCoordinate;
 	}
-/**
- * Gibt Wert von Brettkoordinate aus
- * @param coordinate
- * @return
- */
+
+	/**
+	 * <p> Gibt den Wert der Brettkoordinate auf dem Brett zurück
+	 * @param coordinate Brettkoordinate
+	 * @return Wert der Brettkoordinate
+	 */
 	public int getBoardValue(String coordinate) {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board.length; j++) {
@@ -252,28 +322,55 @@ umgefärbt!
 		return 0;
 	}
 
-	/*
-	 * public int getBoardValue(int i, int j) { return board[i][j]; }
+	/**
+	 * <p> Gibt alle möglichen Züge zurück, die ein Feld und zwei Felder weiter von der Brettposition entfernt sind
+	 * @param column Brettpostion x
+	 * @param row Brettpostion y
+	 * @return alle möglichen Züge
 	 */
-/**
- * Speichert mögliche Züge im Umkreis von einem Feld
- * @param action
- */
-	public void setPossibleMove1(String action) {
-		setAllPossibleMove1(getBoardCoordinate(action)[0], getBoardCoordinate(action)[1]);
-		this.possibleMove1 = setPossibleMove(this.possibleMove1);
+	private String[] setAllPossibleMove(int column, int row){
+		String[] allPossibelMove1 = setAllPossibleMove1(column, row);
+		String[] allPossibelMove2 = setAllPossibleMove2(column, row);
+		String[] allPossibelMove = new String[allPossibelMove1.length + allPossibelMove2.length];
+
+		int k = 0;
+		for (int i = 0; i < allPossibelMove1.length; i++) {
+			allPossibelMove[k] = allPossibelMove1[i];
+			k++;
+		}
+
+		for (int i = 0; i < allPossibelMove2.length; i++) {
+			allPossibelMove[k] = allPossibelMove2[i];
+			k++;
+		}
+
+		return allPossibelMove;
 	}
-/**
- * Speichert alle möglichen Züge im Umkreis von einem Feld
- * @param column
- * @param row
- */
-	private void setAllPossibleMove1(int column, int row) {
+
+	/**
+	 * <p> Gibt mögliche Züge zurück, die ein Feld von der Brettkoordinate entfernt sind
+	 * @param action letzter Zug
+	 * @return mögliche Züge
+	 */
+	public String[] setPossibleMove1(String action) {
+		String[] possibleMove1 = setAllPossibleMove1(getBoardCoordinate(action)[0], getBoardCoordinate(action)[1]);
+		possibleMove1 = setPossibleMove(possibleMove1);
+
+		return possibleMove1;
+	}
+
+	/**
+	 * <p> Gibt alle möglichen Züge zurück, die ein Feld von der Brettposition entfernt sind
+	 * @param column Brettpostion x
+	 * @param row Brettpostion y
+	 * @return alle möglichen Züge
+	 */
+	private String[] setAllPossibleMove1(int column, int row) {
 		/*
 		 * beginnt links unten gegen den uhrzeigersinn
 		 */
 
-		this.possibleMove1 = new String[POSSIBLEMOVE1];
+		String[] possibleMove1 = new String[POSSIBLEMOVE1];
 
 		int i = 0;
 		// links unten
@@ -324,135 +421,143 @@ umgefärbt!
 			i++;
 		}
 
-		this.possibleMove1 = deleteNull(possibleMove1);
+		return deleteNull(possibleMove1);
 	}
-/**
- * Speichert mögliche Züge im Umkreis von zwei Felder
- * @param action
- */
-	public void setPossibleMove2(String action) {
-		setAllPossibleMove2(getBoardCoordinate(action)[0], getBoardCoordinate(action)[1]);
-		this.possibleMove2 = setPossibleMove(this.possibleMove2);
+
+	/**
+	 * <p> Gibt mögliche Züge zurück, die zwei Felder weiter von der Brettkoordinate entfernt sind
+	 * @param action Brettkoordinate
+	 * @return mögliche Züge
+	 */
+	public String[] setPossibleMove2(String action) {
+		String[] possibleMove2 = setAllPossibleMove2(getBoardCoordinate(action)[0], getBoardCoordinate(action)[1]);
+		possibleMove2 = setPossibleMove(possibleMove2);
+
+		return possibleMove2;
 	}
-/**
- * Speichert alle möglichen Züge im Umkreis von zwei Felder
- * @param column
- * @param row
- */
-	private void setAllPossibleMove2(int column, int row) {
+
+	/**
+	 * <p> Gibt alle möglichen Züge zurück, die zwei Felder weiter von der Brettposition entfernt sind
+	 * @param column Brettpostion x
+	 * @param row Brettpostion y
+	 * @return alle möglichen Züge
+	 */
+	private String[] setAllPossibleMove2(int column, int row) {
 		/*
 		 * beginnt links unten gegen den uhrzeigersinn
 		 */
 
-		this.possibleMove2 = new String[POSSIBLEMOVE2];
+		String[] possibleMove2 = new String[POSSIBLEMOVE2];
 		int i = 0;
 
 		// links unten
 		if (column + 2 <= 6 && row - 2 >= 0) {
 			possibleMove2[i] = COORDINATE[column + 2][row - 2];
-			i += 1;
+			i++;
 		}
 
 		// mitte unten links
 		if (column + 2 <= 6 && row - 1 >= 0) {
 			possibleMove2[i] = COORDINATE[column + 2][row - 1];
-			i += 1;
+			i++;
 		}
 
 		// mitte unten
 		if (column + 2 <= 6) {
 			possibleMove2[i] = COORDINATE[column + 2][row];
-			i += 1;
+			i++;
 		}
 
 		// mitte unten rechts
 		if (column + 2 <= 6 && row + 1 <= 6) {
 			possibleMove2[i] = COORDINATE[column + 2][row + 1];
-			i += 1;
+			i++;
 		}
 
 		// rechts unten
 		if (column + 2 <= 6 && row + 2 <= 6) {
 			possibleMove2[i] = COORDINATE[column + 2][row + 2];
-			i += 1;
+			i++;
 		}
 
 		// mitte rechts unten
 		if (column + 1 <= 6 && row + 2 <= 6) {
 			possibleMove2[i] = COORDINATE[column + 1][row + 2];
-			i += 1;
+			i++;
 		}
 
 		// mitte rechts
 		if (row + 2 <= 6) {
 			possibleMove2[i] = COORDINATE[column][row + 2];
-			i += 1;
+			i++;
 		}
 
 		// mitte rechts oben
 		if (column - 1 >= 0 && row + 2 <= 6) {
 			possibleMove2[i] = COORDINATE[column - 1][row + 2];
-			i += 1;
+			i++;
 		}
 
 		// rechts oben
 		if (column - 2 >= 0 && row + 2 <= 6) {
 			possibleMove2[i] = COORDINATE[column - 2][row + 2];
-			i += 1;
+			i++;
 		}
 
 		// mitte oben rechts
 		if (column - 2 >= 0 && row + 1 <= 6) {
 			possibleMove2[i] = COORDINATE[column - 2][row + 1];
-			i += 1;
+			i++;
 		}
 
 		// mitte oben
 		if (column - 2 >= 0) {
 			possibleMove2[i] = COORDINATE[column - 2][row];
-			i += 1;
+			i++;
 		}
 
 		// mitte oben links
 		if (column - 2 >= 0 && row - 1 >= 0) {
 			possibleMove2[i] = COORDINATE[column - 2][row - 1];
-			i += 1;
+			i++;
 		}
 
 		// links oben
 		if (column - 2 >= 0 && row - 2 >= 0) {
 			possibleMove2[i] = COORDINATE[column - 2][row - 2];
-			i += 1;
+			i++;
 		}
 
 		// mitte links oben
 		if (column - 1 >= 0 && row - 2 >= 0) {
 			possibleMove2[i] = COORDINATE[column - 1][row - 2];
-			i += 1;
+			i++;
 		}
 
 		// mitte links
 		if (row - 2 >= 0) {
 			possibleMove2[i] = COORDINATE[column][row - 2];
-			i += 1;
+			i++;
 		}
 
 		// mitte links unten
 		if (column + 1 <= 6 && row - 2 >= 0) {
 			possibleMove2[i] = COORDINATE[column + 1][row - 2];
-			i += 1;
+			i++;
 		}
 
-		this.possibleMove2 = deleteNull(this.possibleMove2);
+		return deleteNull(possibleMove2);
 	}
-/**
- * Speichert mögliche Züge zurück im Umkreis von einem Feld und zwei Felder
- * @param action
- */
-	public void setPossibleMove(String action) {
-		setPossibleMove1(action);
-		setPossibleMove2(action);
-		this.possibleMove = new String[this.possibleMove1.length + this.possibleMove2.length];
+
+	/**
+	 * <p> Gibt mögliche Züge zurück, die ein Feld und zwei Felder weiter von der Brettposition entfernt sind
+	 * @param action Brettkoordinate
+	 * @return mögliche Züge
+	 */
+	public String[] setPossibleMove(String action) {
+		String[] possibleMove1 = setPossibleMove1(action);
+		String[] possibleMove2 = setPossibleMove2(action);
+		String[] possibleMove = new String[possibleMove1.length + possibleMove2.length];
 
 		int k = 0;
 		for (int i = 0; i < possibleMove1.length; i++) {
@@ -465,19 +570,19 @@ umgefärbt!
 			k++;
 		}
 
-		//this.possibleMove = deleteNull(possibleMove);
+		return possibleMove;
 	}
 
 	/**
-	 * Löscht null im Array
-	 * @param array
-	 * @return
+	 * <p> Gibt Array ohne Null zurück
+	 * @param array Array mit null
+	 * @return Array ohne null
 	 */
 	private String[] deleteNull(String[] array) {
 		int i = 0;
 		for (int j = 0; j < array.length; j++) {
 			if (array[j] != null) {
-				i += 1;
+				i++;
 			}
 		}
 
@@ -486,54 +591,28 @@ umgefärbt!
 		String[] uff = new String[i];
 
 		for (int j = 0; j < uff.length; j++) {
+			/*
+			array die eingeben werden 
+			null im array kommen hintereinader am ende vor
+			if (array[j] != null) {
+				uff[j] = array[j];
+			}
+			*/
 			uff[j] = array[j];
+
 		}
 
 		return uff;
 	}
 
-	public String[] getAllStoneCoordinate(int playerStone) {
-		String[] allStoneCoordinate = new String[board.length * board.length];
-		int k = 0;
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board.length; j++) {
-				if (board[i][j] == playerStone) {
-					allStoneCoordinate[k] = COORDINATE[i][j];
-					k += 1;
-				}
-			}
-		}
-
-		allStoneCoordinate = deleteNull(allStoneCoordinate);
-		return allStoneCoordinate;
-	}
-
-	/*
-	 * public String[][][] getAllPosissibelMove(int playerStone) { String[]
-	 * allStoneCoordinate = getAllStoneCoordinate(playerStone); String[][][]
-	 * allPosissibelMove = new String [2][allStoneCoordinate.length][24];
-	 * 
-	 * for(int i = 0; i < allPosissibelMove[0].length; i++) {
-	 * allPosissibelMove[0][i][0] = allStoneCoordinate[i]; }
-	 * 
-	 * for(int i = 0; i < allPosissibelMove[0].length; i++) {
-	 * allPosissibelMove[0][i] = deleteNull(allPosissibelMove[0][i]); }
-	 * 
-	 * 
-	 * for(int i = 0; i < allPosissibelMove[0].length; i++) { for(int j = 0; j <
-	 * setPossibleMove(allStoneCoordinate[i]).length; j++) {
-	 * allPosissibelMove[1][i][j] = setPossibleMove(allStoneCoordinate[i])[j]; } }
-	 * 
-	 * for(int i = 0; i < allPosissibelMove[0].length; i++) { for(int j = 0; j <
-	 * allPosissibelMove[0][0].length; j++) { allPosissibelMove[1][i][j] =
-	 * setPossibleMove(allStoneCoordinate[i])[j]; allPosissibelMove[1][i] =
-	 * deleteNull(allPosissibelMove[1][i]); } }
-	 * 
-	 * return allPosissibelMove; }
+	/**
+	 * <p> Gibt alle Steine auf dem Brett vom Spieler der am Zug ist zurück
+	 * @return Brettkoordinate von den Steinen
 	 */
 	public String[] getStoneOnBoard() {
 		String[] stoneOnBoard = new String[BOARD_COLUMN * BOARD_ROW];
 		int i = 0;
+
 		for (int j = 0; j < board.length; j++) {
 			for (int k = 0; k < board.length; k++) {
 				if (board[j][k] == getCurrentPlayer()) {
@@ -543,37 +622,50 @@ umgefärbt!
 			}
 		}
 
-		stoneOnBoard = deleteNull(stoneOnBoard);
-		return stoneOnBoard;
+		return deleteNull(stoneOnBoard);
 	}
 
+	/**
+	 * <p> Gibt den Spieler der am Zug ist zurück
+	 * @return Spieler
+	 */
 	public int getCurrentPlayer() {
 		if (this.move % 2 == 0) {
-			return 1;
+			return PLAYER;
 		}
-		return -1;
+		return -PLAYER;
 	}
 
+	/**
+	 * <p> Speichert die Punktzahl der Spielern ab
+	 */
 	public void setPoints() {
 		resetPoints();
 
-		for (int j = 0; j < board.length; j++) {
-			for (int k = 0; k < board.length; k++) {
+		for (int j = 0; j < BOARD_COLUMN; j++) {
+			for (int k = 0; k < BOARD_ROW; k++) {
 				if (board[j][k] == -PLAYER) {
-					points[0]++;
+					this.points[0]++;
 				} else if (board[j][k] == PLAYER) {
-					points[1]++;
+					this.points[1]++;
 				}
 			}
 		}
 	}
 
+	/**
+	 * <p> Setzt die Punktzahl der Spielern auf 0
+	 */
 	public void resetPoints() {
 		for (int i = 0; i < points.length; i++) {
 			points[i] = 0;
 		}
 	}
 
+	/**
+	 * <p> Gibt Gewinner Text zurück
+	 * @return Gewinner Text
+	 */
 	public String winnerText(){
 		if(this.winner[0] && this. winner[1]){
 			return "Unentschieden";
@@ -582,22 +674,29 @@ umgefärbt!
 		} else if(this.winner[1]){
 			return "Rot hat gewonnen";
 		}
+
+		//wird nicht eintretten
 		return "";
 	}
 
+	/**
+	 * <p> Seitenwechsel
+	 */
 	public void swapPosition() {
 		for (int i = 0; i < player.length; i++) {
 			player[i] = -player[i];
 		}
 	}
-/**
- * <h1>Spielende</h1>
- * <p>Das Spiel endet,
- * <ul>
- * <li>wenn ein Spieler keine Steine mehr hat,</li>
- * <li>oder wenn beide Spieler keine Züge mehr machen können. </li>
- * </ul>
- */
+
+	/**
+	 * <h1>Spielende</h1>
+	 * <p>Das Spiel endet,
+	 * <ul>
+	 * <li>wenn ein Spieler keine Steine mehr hat.</li>
+	 * <li>wenn beide Spieler keine Züge mehr machen können.</li>
+	 * </ul>
+	 * @return Spielende
+	 */
 	public boolean gameOver() {
 		setPoints();
 		if(gameOver1() || gameOver2()) {
@@ -605,16 +704,17 @@ umgefärbt!
 			return true;
 			
 		}
-
 		return false;
 	}
-/**
- * <h1>Spielende</h1>
- * <p>Das Spiel endet,
- * <ul>
- * <li>wenn ein Spieler keine Steine mehr hat.</li>
- * </ul>
- */
+
+	/**
+	 * <h1>Spielende</h1>
+	 * <p>Das Spiel endet,
+	 * <ul>
+	 * <li>wenn ein Spieler keine Steine mehr hat.</li>
+	 * </ul>
+	 * @return Spielende
+	 */
 	private boolean gameOver1(){
 		for(int i = 0; i < this.points.length; i++){
 			if (this.points[i] == 0) {
@@ -623,23 +723,38 @@ umgefärbt!
 		}
 		return false;
 	}
-/**
- * <h1>Spielende</h1>
- * <p>Das Spiel endet,
- * <ul>
- * <li>wenn beide Spieler keine Züge mehr machen können. </li>
- * </ul>
- */
+
+	/**
+	 * <h1>Spielende</h1>
+	 * <p>Das Spiel endet,
+	 * <ul>
+	 * <li>wenn beide Spieler keine Züge mehr machen können.</li>
+	 * </ul>
+	 * @return Spielende
+	 */
 	private boolean gameOver2(){
 		if (BOARD_COLUMN * BOARD_ROW == points[0] + points[1]) {
 			return true;
 		}
 		return false;
 	}
-/**
- * <h1>Sieger</h1>
- * <p>Der Spieler, der mehr Steine seiner Farbe auf dem Plan hat, gewinnt.
- */
+
+	/**
+	 * <h1> Sonderfall: Endloses Spiel </h1>
+	 * <p> Am Spielende können (selten!) Situationen entstehen, in denen unendlich lange 
+	 * weitergespielt wird und immer wieder dieselben Stellungen auftreten. Wenn 3 x dieselbe 
+	 * Stellung in einer Partie auftritt, dann endet das Spiel auch. Auch dann gewinnt der 
+	 * Spieler mit den meisten Steinen in seiner Farbe.
+	 * @return Spielende
+	 */
+	private boolean gameOver3(){
+		return true;
+	}
+
+	/**
+	 * <h1>Sieger</h1>
+	 * <p>Der Spieler, der mehr Steine seiner Farbe auf dem Plan hat, gewinnt.
+	 */
 	private void winner(){
 		if (points[0] == points[1]) {
 			this.winner[0] = true;
@@ -653,17 +768,16 @@ umgefärbt!
 		}
 	}
 
+	/**
+	 * <p>Setzt die Gewinner zurück
+	 */
 	private void resetWinner(){
 		this.winner[0] = false;
 		this.winner[1] = false;
 	}
-/**
- * <h1>Sieger</h1>
- * <p>Der Spieler, der mehr Steine seiner Farbe auf dem Plan hat, gewinnt.
- * <br>
- * uff[1][k] = spiler -1
- * uff[1][k] = spieler 1
- */
+
+
+	
 	public String[][] playerStone(){
 		String[][] uff = new String[player.length][BOARD_COLUMN * BOARD_COLUMN];
 		int k = 0;
@@ -678,6 +792,9 @@ umgefärbt!
 				}
 			}
 		}
+
+		// uff[0][k] = spiler -1
+		// uff[1][k] = spieler 1
 
 		return uff;
 	}
@@ -695,19 +812,5 @@ umgefärbt!
 			}
 		}
 		System.out.println(Arrays.deepToString(kek));
-
-        
-
     }
-	/*
-	 * public static void main(String[] args) { Game game = new Game(); }
-	 */
 }
-/*
- * 
- * for(int i = 0; i < this.possibleMove2.length;i++){
- * if(board[getBoardCoordinate(possibleMove2[i])[0]][getBoardCoordinate(
- * possibleMove2[i])[1]] == EMPTY_FIELD){
- * board[getBoardCoordinate(possibleMove2[i])[0]][getBoardCoordinate(
- * possibleMove2[i])[1]] = POSSIBLEMOVE2 * getCurrentPlayer(); } } return uff;
- */

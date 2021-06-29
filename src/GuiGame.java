@@ -12,25 +12,16 @@ import javax.swing.JScrollPane;
 
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
-import java.util.Arrays;
 
 public class GuiGame extends JFrame {
     private App app;
     private Game game;
 
-    private Color background = new Color(0XBBADA0);
-    private Font font = new Font("Tahoma", Font.BOLD, 15);
-
     private JPanel[] panel;
-    private JLabel[] label;
     public JButton[][] button;
 
     public GuiGame(App app) {
         super("Attax");
-
-        String[] letter = { 
-            "A", "B", "C", "D", "E", "F", "G" 
-        };
 
         game = new Game();
         panel = new JPanel[5];
@@ -38,19 +29,19 @@ public class GuiGame extends JFrame {
         this.app = app;
    
         // Panel 1
-        panel[0] = letterCoordinate();
+        panel[0] = letterCoordinate(panel[0]);
 
         // Panel 2
-        panel[1] = numberCoordinate();
+        panel[1] = numberCoordinate(panel[1]);
 
         // Panel 3
-        panel[2] = board();
+        panel[2] = board(panel[2]);
 
         // Panel 4
-        panel[3] = numberCoordinate();
+        panel[3] = numberCoordinate(panel[3]);
 
         // Panel 5
-        panel[4] = letterCoordinate();
+        panel[4] = letterCoordinate(panel[4]);
 
         // Hauptfenster
         setLayout(new BorderLayout());
@@ -62,10 +53,17 @@ public class GuiGame extends JFrame {
         
     }
 
-    private JPanel letterCoordinate() {
-        String[] letter = { "A", "B", "C", "D", "E", "F", "G" };
+    /**
+     * Speichert Buchstabenkoordinate im Container
+     * @param panel Container
+     * @return Buchstabenkoordinate im Container
+     */
+    private JPanel letterCoordinate(JPanel panel) {
+        String[] letter = {
+            "A", "B", "C", "D", "E", "F", "G"
+        };
 
-        JPanel panel = new JPanel();
+        panel = new JPanel();
         panel.setLayout(new GridLayout(1, 7));
         for (int i = 0; i < game.BOARD_ROW; i++) {
             panel.add(new JLabel(letter[i]));
@@ -75,12 +73,13 @@ public class GuiGame extends JFrame {
         return panel;
     }
 
-    private JPanel board() {
-        /*
-        action lister funktioniert nicht wegen funktion
-        void oder return benutzen
-        */
-        JPanel panel = new JPanel();
+    /**
+     * Speichert Spielbrett im Container
+     * @param panel Container
+     * @return Spielbrett
+     */
+    private JPanel board(JPanel panel) {
+        panel = new JPanel();
         button = new JButton[7][7];
         panel.setLayout(new GridLayout(7, 7));
         for (int i = 0; i < game.BOARD_ROW; i++) {
@@ -95,8 +94,13 @@ public class GuiGame extends JFrame {
         return panel;
     }
 
-    private JPanel numberCoordinate() {
-        JPanel panel = new JPanel();
+    /**
+     * Speichert Zahlenkoordinate im Container
+     * @param panel Container
+     * @return Zahlenkoordinate
+     */
+    private JPanel numberCoordinate(JPanel panel) {
+        panel = new JPanel();
         panel.setLayout(new GridLayout(7, 1));
         for (int i = 0; i < game.BOARD_COLUMN; i++) {
             panel.add(new JLabel(String.valueOf(7 - i)));
@@ -105,24 +109,26 @@ public class GuiGame extends JFrame {
         return panel;
     }
 
+    /**
+     * Initialisiert Spielbrett mit Koordinaten
+     */
     private void initGuiBoard() {
         panel = new JPanel[5];
 
         // Panel 1
-        panel[0] = letterCoordinate();
+        panel[0] = letterCoordinate(panel[0]);
 
         // Panel 2
-        panel[1] = numberCoordinate();
+        panel[1] = numberCoordinate(panel[1]);
 
         // Panel 3
-        panel[2] = board();
+        panel[2] = board(panel[2]);
 
         // Panel 4
-        panel[3] = numberCoordinate();
+        panel[3] = numberCoordinate(panel[3]);
 
         // Panel 5
-        panel[4] = letterCoordinate();
-        //panel[4] = matchhistory();
+        panel[4] = letterCoordinate(panel[4]);
 
         // Hauptfenster
         setLayout(new BorderLayout());
@@ -133,6 +139,11 @@ public class GuiGame extends JFrame {
         add(panel[4], BorderLayout.SOUTH);
     }
 
+    /**
+     * Speichert Spielverlauf im Container
+     * @param Container
+     * @return Spielverlauf im Container
+     */
     private JPanel matchhistory(){
 
         String[] namen = {
@@ -193,16 +204,4 @@ public class GuiGame extends JFrame {
         }
         System.out.println(selected);
 	}
-/*
-    public static void main(String[] args) {
-
-        GuiGame n = new GuiGame(a);
-
-        n.setSize(500, 500);
-        n.setLocation(500, 200);
-        n.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        n.setResizable(false);
-        n.setVisible(true);
-    }
-    */
 }

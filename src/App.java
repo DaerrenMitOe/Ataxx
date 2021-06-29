@@ -10,8 +10,6 @@ public class App implements ActionListener {
     private Game game;
     // private GameRandomAi game1;
 
-    private boolean noMove = true;
-
     public App() {
         super();
         game = new Game();
@@ -26,7 +24,6 @@ public class App implements ActionListener {
         gui.setVisible(true);
 
         showBoard();
-        //gui.board();
     }
 
     @Override
@@ -37,43 +34,11 @@ public class App implements ActionListener {
         System.out.println(Arrays.deepToString(game.possibleMove1));
 
         vsPlayer(action);
-        
-        /*
-         * -wer ist dran -nur die eigenen steine klicken -mögliche züge -- andere stein
-         * mögliche züge weg -- 1 oder 2 schrite -andere ist dran
-         */
-    }
-/*
-    public void uff(String[] array) {
-        for (int i = 0; i < array.length; i++) {
-            gui.button[game.getBoardCoordinate(array[i])[0]][game.getBoardCoordinate(array[i])[1] + 1]
-                    .setBackground(Color.green);
-        }
-    }
-*/
-    public void deletePossibleMove() {
-        deletePossibleMove1();
-        deletePossibleMove2();
     }
 
-    private void deletePossibleMove1() {
-        for (int i = 0; i < game.board.length; i++) {
-            for (int j = 0; j < game.board.length; j++) {
-                if (game.board[i][j] == game.POSSIBLEMOVE1 * game.getCurrentPlayer())
-                    game.board[i][j] -= game.POSSIBLEMOVE1 * game.getCurrentPlayer();
-            }
-        }
-    }
-
-    private void deletePossibleMove2() {
-        for (int i = 0; i < game.board.length; i++) {
-            for (int j = 0; j < game.board.length; j++) {
-                if (game.board[i][j] == game.POSSIBLEMOVE2 * game.getCurrentPlayer())
-                    game.board[i][j] -= game.POSSIBLEMOVE2 * game.getCurrentPlayer();
-            }
-        }
-    }
-
+    /**
+     * <p> Zeigt Board an
+     */
     public void showBoard() {
         for (int i = 0; i < game.BOARD_COLUMN; i++) {
             for (int j = 0; j < game.BOARD_ROW; j++) {
@@ -94,30 +59,42 @@ public class App implements ActionListener {
         }
     }
 
+    /**
+     * <p> Spieler vs Spieler Modus
+     * @param action Zug
+     */
     public void vsPlayer(String action) {
+         /*
+         -wer ist dran -nur die eigenen steine klicken -mögliche züge -- andere stein
+          mögliche züge weg -- 1 oder 2 schrite -andere ist dran
+         */
+        System.out.println(game.move);
         if (game.getBoardValue(action) == game.PLAYER * game.getCurrentPlayer()) {
-            deletePossibleMove();
-            game.setLastAction(action);
-            game.showPossibleMove(action);
-            showBoard();
-            gameOver();
+            if(!game.noMove()){
+                game.deletePossibleMove();
+                game.showPossibleMove(action);
+                game.setLastAction(action);
+                showBoard();
+                gameOver();
+            }
         } else if (game.getBoardValue(action) == game.POSSIBLEMOVE1 * game.getCurrentPlayer()) {
-            deletePossibleMove();
+            game.deletePossibleMove();
             game.moveStone1(action);
             showBoard();
             gameOver();
         } else if (game.getBoardValue(action) == game.POSSIBLEMOVE2 * game.getCurrentPlayer()) {
-            deletePossibleMove();
+            game.deletePossibleMove();
             game.moveStone2(action);
             showBoard();
             gameOver();
-        } else {
-            showBoard();
+        } else{
             gameOver();
         }
-        
     }
 
+    /**
+     * <p> GewinnerFenster
+     */
     public void gameOver() {
         if(game.gameOver()){
             gui.gameOver(game.winnerText());
