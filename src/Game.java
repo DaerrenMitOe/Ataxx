@@ -148,7 +148,7 @@ bewegt er sich dorthin und teilt sich nicht. Besetze Felder können übersprunge
  * <h1>Keine Züge</h1>
  * <p>Bist du an der Reihe und kannst keinen Stein versetzen, so verfällt dein Zug, dein 
 Gegner kommt wieder an die Reihe! 
- * @return
+ * @return Zug möglich oder nicht möglich
  */
 	public boolean noMove(){
 		String[] uff = getStoneOnBoard();

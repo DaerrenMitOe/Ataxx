@@ -47,7 +47,7 @@ public class App implements ActionListener {
         for (int i = 0; i < game.BOARD_COLUMN; i++) {
             for (int j = 0; j < game.BOARD_ROW; j++) {
                 // print number
-                guiGame.button[i][j].setText(String.valueOf(game.board[i][j]));
+                //guiGame.button[i][j].setText(String.valueOf(game.board[i][j]));
 
                 if (game.board[i][j] == game.EMPTY_FIELD) {
                     guiGame.button[i][j].setBackground(Color.white);
@@ -81,8 +81,6 @@ public class App implements ActionListener {
                 game.setLastAction(action);
                 showBoard();
                 gameOver();
-            } else {
-                ai = true;
             }
         } else if (game.getBoardValue(action) == game.POSSIBLEMOVE1 * game.getCurrentPlayer()) {
             ai = true;
@@ -133,6 +131,7 @@ public class App implements ActionListener {
                 showBoard();
             } else if(n == 1){
                 game.initBoard();
+                game.initGame();
                 showBoard();
                 /*
                 guiNewGame.setSize(800, 800);
