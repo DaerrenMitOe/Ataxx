@@ -13,6 +13,7 @@ public class App implements ActionListener {
     // private GameRandomAi game1;
 
     private boolean ai;
+    private int gameMode = 2;
 
     public App() {
         super();
@@ -36,8 +37,16 @@ public class App implements ActionListener {
         System.out.println(action);
         System.out.println(Arrays.deepToString(game.possibleMove1));
 
-        //vsPlayer(action);
-        vsRandomAi(action);
+        switch(this.gameMode){
+            case 1:
+                vsPlayer(action);
+                break;
+            case 2:
+                vsRandomAi(action);
+                break;
+            case 3:
+                break;
+        }
     }
 
     /**
@@ -130,6 +139,7 @@ public class App implements ActionListener {
                 game.initBoard();
                 showBoard();
             } else if(n == 1){
+                this.gameMode = 1;
                 game.initBoard();
                 game.initGame();
                 showBoard();
@@ -141,7 +151,9 @@ public class App implements ActionListener {
                 guiNewGame.setVisible(true);
                 */
             } else if(n == 2){
-                game.initBoard();  
+                this.gameMode = 2;
+                game.initBoard(); 
+                game.initGame(); 
                 showBoard();
             }
         }
