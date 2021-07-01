@@ -154,30 +154,19 @@ public class GuiGame extends JFrame {
         return panel;
     }
 
-    public void gameOver(String winner) {
+    public int gameOver(String winner) {
         // Erstellung Array vom Datentyp Object, Hinzufügen der Optionen		
+        
         Object[] options = {
             "Rematch", "New Game", "Analysis Board"
         };
-
+        
         int n = JOptionPane.showOptionDialog(this,
                                                     winner,
                                                     "Game Over",
                         JOptionPane.DEFAULT_OPTION, 
                                                     JOptionPane.PLAIN_MESSAGE, 
                         null, options,null);
-
-        switch(n){
-            case 0:
-                new Game();
-                break;
-
-            case 1:
-                game.initBoard();
-                break;
-                
-            case 2:
-                break;
-        }
+        return n;
 	}
 }

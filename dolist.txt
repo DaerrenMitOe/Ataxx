@@ -1,4 +1,5 @@
 -punkte bug fixen
+-init funktionen änderne
 -random ai modus
 -new game gui
 -analysie board gui

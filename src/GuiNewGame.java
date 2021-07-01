@@ -31,6 +31,32 @@ public class GuiNewGame extends JFrame {
 ;
         this.app = app;
 
+        initNewGame();
+    }
+
+    private JPanel gameVariant(JPanel panel){
+        return panel;
+    }
+
+    private void timeControl(JPanel panel){
+        String[] timeControl = {
+            "Real Time", "Unlimited"
+        };
+
+
+        panel = new JPanel();
+        for(int i = 0; i < timeControl.length; i++){
+
+        }
+        comboBox[0] = new JComboBox();
+        comboBox[0].addItem("Human");
+		comboBox[0].addItem("Random AI");
+		//comboBox1.addItem("AI");
+        comboBox[0].setActionCommand("timeControl");
+		comboBox[0].addActionListener(app);
+    }
+    public void initNewGame(){
+
         // Panel 1
         panel[0] = new JPanel();
         panel[0].setLayout(new GridLayout(1, 1));
@@ -112,47 +138,5 @@ public class GuiNewGame extends JFrame {
         add(panel[2]);
         add(panel[3]);
         add(panel[4]);
-    }
-
-    private JPanel gameVariant(JPanel panel){
-
-    }
-
-    private void timeControl(JPanel panel){
-        String[] timeControl = {
-            "Real Time", "Unlimited"
-        };
-
-
-        panel = new JPanel();
-        for(int i = 0; i < timeControl.length; i++){
-
-        }
-        comboBox[0] = new JComboBox();
-        comboBox[0].addItem("Human");
-		comboBox[0].addItem("Random AI");
-		//comboBox1.addItem("AI");
-        comboBox[0].setActionCommand("timeControl");
-		comboBox[0].addActionListener(app);
-    }
-    public void initNewGame(){
-        // Hauptfenster
-        setLayout(new GridLayout(5,1));
-        add(panel[0]);
-        add(panel[1]);
-        add(panel[2]);
-        add(panel[3]);
-        add(panel[4]);
-    }
-
-    public static void main(String[] args) {
-        App a = new App();
-        GuiNewGame n = new GuiNewGame(a);
-
-        n.setSize(500, 500);
-        n.setLocation(500, 200);
-        n.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        n.setResizable(false);
-        n.setVisible(true);
     }
 }

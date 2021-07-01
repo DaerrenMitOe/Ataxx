@@ -17,6 +17,7 @@ public class Game {
 	protected int move;
 	protected int gameRound;
 	private boolean gameOver;
+	protected boolean[] currentPlayer = new boolean[2];
 	protected boolean[] winner = new boolean[2];
 	protected int[] player = new int[2];
 	protected double[] playerPoints = new double[2];
@@ -29,11 +30,13 @@ public class Game {
 	protected String[] possibleMove2;
 
 	public Game() {
-		this.move = 1;
 		initBoard();
+		initGame();
 		COORDINATE = initCoordinate();
 	}
-
+	/**
+	 * <p> Initialisiert das Spielbrett mit der Startposition
+	 */
 	public void initBoard() {
 		this.board = new int[BOARD_COLUMN][BOARD_ROW];
 		for (int i = 0; i < BOARD_COLUMN; i++) {
@@ -67,6 +70,10 @@ public class Game {
 		}
 	}
 
+	/**
+	 * <p> Initialisiert die Brettkoordinanten
+	 * @return Brettkoordinate
+	 */
 	private String[][] initCoordinate() {
 		String[] letter = { "A", "B", "C", "D", "E", "F", "G" };
 
@@ -80,8 +87,22 @@ public class Game {
 
 		return coordinate;
 	}
-
+	
+	/**
+	 * <p> Initialister die Startwerte des Spiel
+	 */
 	public void initGame() {
+		this.move = 1;
+		this.gameRound = 0;
+
+		this.currentPlayer[0] = true;
+		this.currentPlayer[1] = false;
+
+		this.playerPoints[0] = 0;
+		this.playerPoints[1] = 0;
+
+		this.stonePoints[0] = 0;
+		this.stonePoints[1] = 0;
 
 	}
 

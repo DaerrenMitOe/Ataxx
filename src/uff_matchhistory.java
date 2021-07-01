@@ -1,11 +1,11 @@
 import java.util.Arrays;
 
-public class uff {
+public class uff_matchhistory {
     private Game game;
     private String[][][] uff;
     private int gameRound = 1;
     private String[] lol = new String[1];
-    public uff() {
+    public uff_matchhistory() {
         uff = new String [gameRound][game.BOARD_COLUMN * game.BOARD_ROW][2];
     }
 
