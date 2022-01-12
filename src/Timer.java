@@ -1,3 +1,5 @@
+import java.time.Clock;
+
 class Timer extends Thread{
     private int HS = 0;
     private int sek = 0;
